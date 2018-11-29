@@ -12,17 +12,20 @@ namespace SharpLesson1
         protected Point pos;
         protected Point dir;
         protected Size size;
+        protected Image image;
 
         public BaseObject(Point pos, Point dir, Size size)
         {
             this.pos = pos;
             this.dir = dir;
             this.size = size;
+            image = Image.FromFile("res/asteroid.png");
         }
 
         public virtual void Draw()
         {
-            Game.buffer.Graphics.DrawEllipse(Pens.White, pos.X, pos.Y, size.Width, size.Height);
+            //Game.buffer.Graphics.DrawEllipse(Pens.White, pos.X, pos.Y, size.Width, size.Height);
+            Game.buffer.Graphics.DrawImage(image, pos.X, pos.Y, size.Width, size.Height);
         }
 
         public virtual void Update()

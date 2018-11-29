@@ -34,7 +34,7 @@ namespace SharpLesson1
             {
                 size = rnd.Next(5, 31);
                 _objs.Add(new Asteroid(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Asteroid.minSpeed, Asteroid.maxSpeed), 0), new Size(size, size)));
-                _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0), new Size(5, 5)));
+                _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0), new Size(12, 12)));
                 size = rnd.Next(Ship.minSize, Ship.maxSize);
                 _objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
             }

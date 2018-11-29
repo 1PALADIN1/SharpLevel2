@@ -20,11 +20,13 @@ namespace SharpLesson1
         public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             grow = false;
+            image = Image.FromFile("res/ship.png");
         }
 
         public override void Draw()
         {
-            Game.buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(pos.X, pos.Y, size.Width, size.Height));
+            base.Draw();
+            //Game.buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(pos.X, pos.Y, size.Width, size.Height));
         }
 
         public override void Update()
