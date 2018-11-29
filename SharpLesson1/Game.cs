@@ -10,10 +10,11 @@ namespace SharpLesson1
 {
     class Game
     {
+        private static readonly int ITER_NUM = 20;
         private static BufferedGraphicsContext _context;
         public static BufferedGraphics buffer;
 
-        public static BaseObject[] _objs;
+        public static List<BaseObject> _objs;
 
         public static int Height { get; set; }
         public static int Width { get; set; }
@@ -25,19 +26,19 @@ namespace SharpLesson1
 
         public static void Load()
         {
-            _objs = new BaseObject[30];
-            for (int i = 0; i < _objs.Length / 2; i++)
-            {
-                _objs[i] = new BaseObject(new Point(600, i * 20), new Point(-i, -i), new Size(10, 10));
-            }
+            _objs = new List<BaseObject>();
+            Random rnd = new Random();
+            int size = 0;
 
-            for (int i = _objs.Length / 2; i < _objs.Length; i++)
+            for (int i = 0; i < ITER_NUM; i++)
             {
-                _objs[i] = new Star(new Point(600, i * 20), new Point(-i, 0), new Size(5, 5));
-
+                size = rnd.Next(5, 31);
+                _objs.Add(new Asteroid(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Asteroid.minSpeed, Asteroid.maxSpeed), 0), new Size(size, size)));
+                _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0), new Size(5, 5)));
+                size = rnd.Next(Ship.minSize, Ship.maxSize);
+                _objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
             }
         }
-
 
         public static void Init(Form form)
         {
@@ -68,12 +69,12 @@ namespace SharpLesson1
         //отрисовка
         public static void Draw()
         {
-            buffer.Graphics.Clear(Color.Black);
-            buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(100, 100, 200, 200));
-            buffer.Graphics.FillEllipse(Brushes.Wheat, new Rectangle(100, 100, 200, 200));
-            buffer.Render();
+            //buffer.Graphics.Clear(Color.Black);
+            //buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(100, 100, 200, 200));
+            //buffer.Graphics.FillEllipse(Brushes.Wheat, new Rectangle(100, 100, 200, 200));
+            //buffer.Render();
 
-            //отрисовка массива объект
+            //отрисовка массива объектов
             buffer.Graphics.Clear(Color.Black);
             foreach (BaseObject obj in _objs)
                 obj.Draw();

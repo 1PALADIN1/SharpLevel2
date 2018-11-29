@@ -9,6 +9,9 @@ namespace SharpLesson1
 {
     class Star : BaseObject
     {
+        public readonly static int maxSpeed = -5;
+        public readonly static int minSpeed = -15;
+
         public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
         }
