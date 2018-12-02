@@ -14,6 +14,17 @@ namespace SharpLesson1
         protected Size size;
         protected Image image;
 
+        public Point Position
+        {
+            get => pos;
+        }
+
+        /// <summary>
+        /// Инициализация базового объекта
+        /// </summary>
+        /// <param name="pos">Начальная позиция</param>
+        /// <param name="dir">Направление</param>
+        /// <param name="size">Размер</param>
         public BaseObject(Point pos, Point dir, Size size)
         {
             this.pos = pos;

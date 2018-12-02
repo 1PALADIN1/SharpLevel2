@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SharpLesson1
 {
-    class Asteroid : BaseObject
+    class Asteroid : BaseObject, IHitable
     {
         public readonly static int maxSpeed = -9;
         public readonly static int minSpeed = -25;
@@ -56,6 +56,28 @@ namespace SharpLesson1
         {
             pos.X = Game.Width + size.Width;
             pos.Y = rnd.Next(0, Game.Height + 1);
+        }
+
+        /// <summary>
+        /// Проверка на столкновение объектов
+        /// </summary>
+        /// <param name="other">Объект типа BaseObject</param>
+        /// <returns>Возвращает истину, если столкновение было обнаружено</returns>
+        public bool CheckHit(BaseObject other)
+        {
+            if (other.Position.X <= (pos.X + size.Width) && other.Position.X >= (pos.X - size.Width)
+                && other.Position.Y <= (pos.Y + size.Height) && other.Position.Y >= (pos.Y - size.Height))
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Метод обрабатывающий столкновения объектов
+        /// </summary>
+        public void Hit()
+        {
+            ChangeSpeed();
+            ChangePosition();
         }
     }
 }
