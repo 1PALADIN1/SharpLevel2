@@ -1,31 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
 
 namespace SharpLesson1
 {
-    class Asteroid : BaseObject
+    class Bullet : BaseObject
     {
         public readonly static int maxSpeed = -9;
         public readonly static int minSpeed = -25;
-        public readonly static int maxSize = 30;
-        public readonly static int minSize = 5;
+        public readonly static int bulletSize = 12;
 
         private Random rnd;
 
         /// <summary>
-        /// Инициализация объекта астероида
+        /// Инициализация объекта пули
         /// </summary>
         /// <param name="pos">Начальная позиция</param>
         /// <param name="dir">Направление</param>
         /// <param name="size">Размер</param>
-        public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
+        public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             rnd = new Random();
-            image = Image.FromFile("res/asteroid.png");
+            image = Image.FromFile("res/bullet.png");
         }
 
         /// <summary>
@@ -33,8 +32,8 @@ namespace SharpLesson1
         /// </summary>
         public override void Update()
         {
-            pos.X = pos.X + dir.X;
-            if (pos.X < 0)
+            pos.X = pos.X - dir.X;
+            if (pos.X > Game.Width)
             {
                 ChangeSpeed();
                 ChangePosition();
@@ -42,7 +41,7 @@ namespace SharpLesson1
         }
 
         /// <summary>
-        /// Случайным образом изменение скорости астероида
+        /// Случайным образом изменение скорости пули
         /// </summary>
         private void ChangeSpeed()
         {
@@ -50,11 +49,11 @@ namespace SharpLesson1
         }
 
         /// <summary>
-        /// Cлучайным образом изменение позиции астероида
+        /// Cлучайным образом изменение позиции пули
         /// </summary>
         private void ChangePosition()
         {
-            pos.X = Game.Width + size.Width;
+            pos.X = -size.Width;
             pos.Y = rnd.Next(0, Game.Height + 1);
         }
     }

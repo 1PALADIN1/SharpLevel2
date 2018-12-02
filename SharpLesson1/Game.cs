@@ -24,7 +24,10 @@ namespace SharpLesson1
 
         }
 
-        public static void Load()
+        /// <summary>
+        /// Загрузка объектов
+        /// </summary>
+        private static void Load()
         {
             _objs = new List<BaseObject>();
             Random rnd = new Random();
@@ -32,14 +35,23 @@ namespace SharpLesson1
 
             for (int i = 0; i < ITER_NUM; i++)
             {
-                size = rnd.Next(5, 31);
+                size = rnd.Next(Asteroid.minSize, Asteroid.maxSize + 1);
+                //астероиды
                 _objs.Add(new Asteroid(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Asteroid.minSpeed, Asteroid.maxSpeed), 0), new Size(size, size)));
-                _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0), new Size(12, 12)));
-                size = rnd.Next(Ship.minSize, Ship.maxSize);
+                //звезды
+                _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0), new Size(Star.starSize, Star.starSize)));
+                //корабли
+                size = rnd.Next(Ship.minSize, Ship.maxSize + 1);
                 _objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
+                //пули
+                _objs.Add(new Bullet(new Point(0, rnd.Next(0, Height + 1)), new Point(rnd.Next(Bullet.minSpeed, Bullet.maxSpeed), 0), new Size(Bullet.bulletSize, Bullet.bulletSize)));
             }
         }
 
+        /// <summary>
+        /// Инициализация игровых настроек и запуск таймера обновления игровых переменных
+        /// </summary>
+        /// <param name="form">Форма, на которой будет отрисовываться игра</param>
         public static void Init(Form form)
         {
             // Графическое устройство для вывода графики            
@@ -66,7 +78,9 @@ namespace SharpLesson1
             Update();
         }
 
-        //отрисовка
+        /// <summary>
+        /// Отрисовка объектов
+        /// </summary>
         public static void Draw()
         {
             //buffer.Graphics.Clear(Color.Black);
@@ -81,6 +95,9 @@ namespace SharpLesson1
             buffer.Render();
         }
 
+        /// <summary>
+        /// Обновление положения игровых объектов в пространстве
+        /// </summary>
         public static void Update()
         {
             foreach (BaseObject obj in _objs)
