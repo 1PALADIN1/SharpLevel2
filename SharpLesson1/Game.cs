@@ -14,10 +14,28 @@ namespace SharpLesson1
         private static BufferedGraphicsContext _context;
         private static List<Bullet> bulletHitList;
         private static List<Asteroid> asteroidHitList;
+        private static int height;
+        private static int width;
         public static BufferedGraphics buffer;
         public static List<BaseObject> _objs;
-        public static int Height { get; set; }
-        public static int Width { get; set; }
+        public static int Height
+        {
+            get => height;
+            set
+            {
+                if (value > 1000 || value <= 0) throw new ArgumentOutOfRangeException("Высота экрана не должна быть больше 1000 пикселей или отрицательной");
+                height = value;
+            }
+        }
+        public static int Width
+        {
+            get => width;
+            set
+            {
+                if (value > 1000 || value <= 0) throw new ArgumentOutOfRangeException("Ширина экрана не должна быть больше 1000 пикселей или отрицательной");
+                width = value;
+            }
+        }
 
         static Game()
         {
