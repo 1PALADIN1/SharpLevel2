@@ -17,18 +17,21 @@ namespace SharpLesson1
         public readonly static int maxSize = 30;
         public readonly static int minSize = 5;
 
+        /// <summary>
+        /// Инициализация объекта космического корабля
+        /// </summary>
+        /// <param name="pos">Начальная позиция</param>
+        /// <param name="dir">Направление</param>
+        /// <param name="size">Размер</param>
         public Ship(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             grow = false;
             image = Image.FromFile("res/ship.png");
         }
 
-        public override void Draw()
-        {
-            base.Draw();
-            //Game.buffer.Graphics.DrawRectangle(Pens.White, new Rectangle(pos.X, pos.Y, size.Width, size.Height));
-        }
-
+        /// <summary>
+        /// Обновление положения объекта в пространстве
+        /// </summary>
         public override void Update()
         {
             pos.X = pos.X + dir.X;
@@ -36,7 +39,9 @@ namespace SharpLesson1
             ChangeSize();
         }
 
-        //динамически меняем размер
+        /// <summary>
+        /// Динамическое изменение размера корабля
+        /// </summary>
         private void ChangeSize()
         {
             if (grow)

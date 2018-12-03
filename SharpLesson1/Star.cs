@@ -11,19 +11,22 @@ namespace SharpLesson1
     {
         public readonly static int maxSpeed = -5;
         public readonly static int minSpeed = -15;
+        public readonly static int starSize = 12;
 
+        /// <summary>
+        /// Инициализация объекта звезды
+        /// </summary>
+        /// <param name="pos">Начальная позиция</param>
+        /// <param name="dir">Направление</param>
+        /// <param name="size">Размер</param>
         public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             image = Image.FromFile("res/star.png");
         }
 
-        public override void Draw()
-        {
-            base.Draw();
-            //Game.buffer.Graphics.DrawLine(Pens.White, pos.X, pos.Y, pos.X + size.Width, pos.Y + size.Height);
-            //Game.buffer.Graphics.DrawLine(Pens.White, pos.X + size.Width, pos.Y, pos.X, pos.Y + size.Height);
-        }
-
+        /// <summary>
+        /// Обновление положения объекта в пространстве
+        /// </summary>
         public override void Update()
         {
             pos.X = pos.X + dir.X;
