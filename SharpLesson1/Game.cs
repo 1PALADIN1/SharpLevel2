@@ -80,6 +80,12 @@ namespace SharpLesson1
                 //bulletHitList.Add(bullet);
             }
 
+            //аптечки
+            for (int i = 0; i < 5; i++)
+            {
+                _objs.Add(new Chest(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Chest.minSpeed, Chest.maxSpeed), 0), new Size(Chest.minSize, Chest.minSize)));
+            }
+
             _objs.Add(_ship);
         }
 
