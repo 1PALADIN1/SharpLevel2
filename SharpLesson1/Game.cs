@@ -22,6 +22,7 @@ namespace SharpLesson1
         public static List<BaseObject> _objs;
         private static Timer _timer;
         public static Random Rnd = new Random();
+        public static int HIT_COUNT; //количество очков
 
         public static int Height
         {
@@ -102,6 +103,7 @@ namespace SharpLesson1
             g = form.CreateGraphics();
             Width = form.ClientSize.Width;
             Height = form.ClientSize.Height;
+            HIT_COUNT = 0;
 
             // Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
             buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
@@ -169,6 +171,8 @@ namespace SharpLesson1
             {
                 buffer.Graphics.DrawString("Energy:" + _ship.Energy,
                                     SystemFonts.DefaultFont, Brushes.White, 0, 0);
+                buffer.Graphics.DrawString("Points:" + HIT_COUNT,
+                                    SystemFonts.DefaultFont, Brushes.White, 0, 20);
             }
             buffer.Render();
         }
@@ -191,6 +195,7 @@ namespace SharpLesson1
                     System.Media.SystemSounds.Hand.Play();
                     asteroidHitList[i] = null;
                     _bullet = null;
+                    HIT_COUNT++;
                     continue;
                 }
                 if (!_ship.CheckHit(asteroidHitList[i])) continue;
