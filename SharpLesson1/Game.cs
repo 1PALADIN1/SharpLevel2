@@ -16,8 +16,13 @@ namespace SharpLesson1
         private static List<Asteroid> asteroidHitList;
         private static int height;
         private static int width;
+        private static Ship _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(Ship.minSize, Ship.minSize));
+        private static Bullet _bullet;
         public static BufferedGraphics buffer;
         public static List<BaseObject> _objs;
+        private static Timer _timer;
+        public static Random Rnd = new Random();
+
         public static int Height
         {
             get => height;
@@ -65,15 +70,17 @@ namespace SharpLesson1
                 //звезды
                 _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0), new Size(Star.starSize, Star.starSize)));
                 //корабли
-                size = rnd.Next(Ship.minSize, Ship.maxSize + 1);
-                _objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
+                //size = rnd.Next(Ship.minSize, Ship.maxSize + 1);
+                //_objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
                 //пули
-                Bullet bullet = new Bullet(new Point(0, rnd.Next(0, Height + 1)),
-                    new Point(rnd.Next(Bullet.minSpeed, Bullet.maxSpeed), 0),
-                    new Size(Bullet.bulletSize, Bullet.bulletSize));
-                _objs.Add(bullet);
-                bulletHitList.Add(bullet);
+                //Bullet bullet = new Bullet(new Point(0, rnd.Next(0, Height + 1)),
+                //    new Point(rnd.Next(Bullet.minSpeed, Bullet.maxSpeed), 0),
+                //    new Size(Bullet.bulletSize, Bullet.bulletSize));
+                //_objs.Add(bullet);
+                //bulletHitList.Add(bullet);
             }
+
+            _objs.Add(_ship);
         }
 
         /// <summary>
@@ -95,9 +102,22 @@ namespace SharpLesson1
 
             Load();
 
-            Timer timer = new Timer { Interval = 100 };
-            timer.Start();
-            timer.Tick += Timer_Tick;
+            _timer = new Timer { Interval = 100 };
+            _timer.Start();
+            _timer.Tick += Timer_Tick;
+
+            form.KeyDown += Form_KeyDown;
+            Ship.MessageDie += Finish;
+        }
+
+        private static void Form_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A)
+            {
+                _objs.Add(new Bullet(new Point(_ship.Position.X + 10, _ship.Position.Y + 4), new Point(Bullet.maxSpeed, 0), new Size(Bullet.bulletSize, Bullet.bulletSize)));
+            }
+            if (e.KeyCode == Keys.Up) _ship.Up();
+            if (e.KeyCode == Keys.Down) _ship.Down();
         }
 
         private static void Timer_Tick(object sender, EventArgs e)
@@ -106,6 +126,7 @@ namespace SharpLesson1
             Update();
 
             //проверка на столкновения
+            /*
             foreach (var bullet in bulletHitList)
             {
                 foreach (var asteroid in asteroidHitList)
@@ -117,6 +138,7 @@ namespace SharpLesson1
                     }
                 }
             }
+            */
         }
 
         /// <summary>
@@ -133,6 +155,15 @@ namespace SharpLesson1
             buffer.Graphics.Clear(Color.Black);
             foreach (BaseObject obj in _objs)
                 obj.Draw();
+            //buffer.Render();
+
+            _bullet?.Draw();
+            _ship?.Draw();
+            if (_ship != null)
+            {
+                buffer.Graphics.DrawString("Energy:" + _ship.Energy,
+                                    SystemFonts.DefaultFont, Brushes.White, 0, 0);
+            }
             buffer.Render();
         }
 
@@ -143,6 +174,35 @@ namespace SharpLesson1
         {
             foreach (BaseObject obj in _objs)
                 obj.Update();
+
+            _bullet?.Update();
+            for (var i = 0; i < asteroidHitList.Count; i++)
+            {
+                if (asteroidHitList[i] == null) continue;
+                asteroidHitList[i].Update();
+                if (_bullet != null && _bullet.CheckHit(asteroidHitList[i]))
+                {
+                    System.Media.SystemSounds.Hand.Play();
+                    asteroidHitList[i] = null;
+                    _bullet = null;
+                    continue;
+                }
+                if (!_ship.CheckHit(asteroidHitList[i])) continue;
+                var rnd = new Random();
+                _ship?.EnergyLow(rnd.Next(1, 10));
+                System.Media.SystemSounds.Asterisk.Play();
+                if (_ship.Energy <= 0) _ship?.Die();
+            }
+        }
+
+        /// <summary>
+        /// Метод завершения игры
+        /// </summary>
+        public static void Finish()
+        {
+            _timer.Stop();
+            buffer.Graphics.DrawString("The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline), Brushes.White, 200, 100);
+            buffer.Render();
         }
     }
 }

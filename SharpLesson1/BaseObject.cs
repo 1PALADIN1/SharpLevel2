@@ -14,6 +14,8 @@ namespace SharpLesson1
         protected Size size;
         protected Image image;
 
+        public delegate void Message();
+
         public Point Position
         {
             get => pos;

@@ -65,8 +65,8 @@ namespace SharpLesson1
         /// <returns>Возвращает истину, если столкновение было обнаружено</returns>
         public bool CheckHit(BaseObject other)
         {
-            if (other.Position.X <= (pos.X + size.Width) && other.Position.X >= (pos.X - size.Width)
-                && other.Position.Y <= (pos.Y + size.Height) && other.Position.Y >= (pos.Y - size.Height))
+            if (other.Position.X <= (pos.X + size.Width/2) && other.Position.X >= (pos.X - size.Width/2)
+                && other.Position.Y <= (pos.Y + size.Height/2) && other.Position.Y >= (pos.Y - size.Height/2))
                 return true;
             return false;
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SharpLesson1
 {
-    class Bullet : BaseObject, IHitable
+    class Bullet : BaseObject, IHitable, IDisposable
     {
         public readonly static int maxSpeed = -9;
         public readonly static int minSpeed = -25;
@@ -35,8 +35,7 @@ namespace SharpLesson1
             pos.X = pos.X - dir.X;
             if (pos.X > Game.Width)
             {
-                ChangeSpeed();
-                ChangePosition();
+                Dispose();
             }
         }
 
@@ -64,8 +63,8 @@ namespace SharpLesson1
         /// <returns>Возвращает истину, если столкновение было обнаружено</returns>
         public bool CheckHit(BaseObject other)
         {
-            if (other.Position.X <= (pos.X + size.Width) && other.Position.X >= (pos.X - size.Width)
-                && other.Position.Y <= (pos.Y + size.Height) && other.Position.Y >= (pos.Y - size.Height))
+            if (other.Position.X <= (pos.X + size.Width/2) && other.Position.X >= (pos.X - size.Width/2)
+                && other.Position.Y <= (pos.Y + size.Height/2) && other.Position.Y >= (pos.Y - size.Height/2))
                 return true;
             return false;
         }
@@ -75,8 +74,14 @@ namespace SharpLesson1
         /// </summary>
         public void Hit()
         {
-            ChangeSpeed();
-            ChangePosition();
+            Dispose();
+            //ChangeSpeed();
+            //ChangePosition();
+        }
+
+        public void Dispose()
+        {
+            image = null;
         }
     }
 }
