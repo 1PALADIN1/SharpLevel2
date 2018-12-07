@@ -15,6 +15,7 @@ namespace SharpLesson1
         protected Image image;
 
         public delegate void Message();
+        public delegate string LogMessage();
 
         public Point Position
         {
@@ -46,5 +47,10 @@ namespace SharpLesson1
         }
 
         public abstract void Update();
+
+        public static void Log(LogMessage message)
+        {
+            Console.WriteLine(">> {0}", message.Invoke());
+        }
     }
 }

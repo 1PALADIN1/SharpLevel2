@@ -118,6 +118,8 @@ namespace SharpLesson1
             // Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
             buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
+            BaseObject.Log(() => { return "Запуск корабля и начало игры!"; } );
+
             Load();
 
             _timer = new Timer { Interval = 100 };
@@ -203,6 +205,8 @@ namespace SharpLesson1
                         //bullet.Hit();
                         asteroid.Hit();
                         HIT_COUNT++;
+
+                        BaseObject.Log(() => { return "Астероид сбит"; });
                     }
                 }
             }
@@ -217,6 +221,7 @@ namespace SharpLesson1
                     {
                         (item as Chest).Hit();
                         _ship?.EnergyUp(Rnd.Next(1, 10));
+                        BaseObject.Log(() => { return "Энергия увеличина"; });
                     }
 
                     if (item is Asteroid)
@@ -224,7 +229,13 @@ namespace SharpLesson1
                         (item as Asteroid).Hit();
                         _ship?.EnergyLow(Rnd.Next(1, 10));
                         System.Media.SystemSounds.Asterisk.Play();
-                        if (_ship.Energy <= 0) _ship?.Die();
+                        BaseObject.Log(() => { return "Попадание астероида по кораблю"; });
+
+                        if (_ship.Energy <= 0)
+                        {
+                            _ship?.Die();
+                            BaseObject.Log(() => { return "Корабль уничтожен..."; });
+                        }
                     }
                 }
             }
