@@ -14,6 +14,9 @@ namespace SharpLesson1
         protected Size size;
         protected Image image;
 
+        public delegate void Message();
+        public delegate string LogMessage();
+
         public Point Position
         {
             get => pos;
@@ -39,9 +42,15 @@ namespace SharpLesson1
         public virtual void Draw()
         {
             //Game.buffer.Graphics.DrawEllipse(Pens.White, pos.X, pos.Y, size.Width, size.Height);
-            Game.buffer.Graphics.DrawImage(image, pos.X, pos.Y, size.Width, size.Height);
+            if (image != null)
+                Game.buffer.Graphics.DrawImage(image, pos.X, pos.Y, size.Width, size.Height);
         }
 
         public abstract void Update();
+
+        public static void Log(LogMessage message)
+        {
+            Console.WriteLine(">> {0}", message.Invoke());
+        }
     }
 }
