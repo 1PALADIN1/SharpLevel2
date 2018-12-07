@@ -21,6 +21,7 @@ namespace SharpLesson1
         public static BufferedGraphics buffer;
         public static List<BaseObject> _objs;
         private static Timer _timer;
+        public static List<BaseObject> garbage;
         public static Random Rnd = new Random();
         public static int HIT_COUNT; //количество очков
 
@@ -104,6 +105,7 @@ namespace SharpLesson1
             Width = form.ClientSize.Width;
             Height = form.ClientSize.Height;
             HIT_COUNT = 0;
+            garbage = new List<BaseObject>();
 
             // Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
             buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
@@ -122,7 +124,10 @@ namespace SharpLesson1
         {
             if (e.KeyCode == Keys.A)
             {
-                _objs.Add(new Bullet(new Point(_ship.Position.X + 10, _ship.Position.Y + 4), new Point(Bullet.maxSpeed, 0), new Size(Bullet.bulletSize, Bullet.bulletSize)));
+                _bullet = new Bullet(new Point(_ship.Position.X + 10, _ship.Position.Y + 4),
+                    new Point(Bullet.maxSpeed, 0), new Size(Bullet.bulletSize, Bullet.bulletSize));
+                _objs.Add(_bullet);
+                bulletHitList.Add(_bullet);
             }
             if (e.KeyCode == Keys.Up) _ship.Up();
             if (e.KeyCode == Keys.Down) _ship.Down();
@@ -132,21 +137,6 @@ namespace SharpLesson1
         {
             Draw();
             Update();
-
-            //проверка на столкновения
-            /*
-            foreach (var bullet in bulletHitList)
-            {
-                foreach (var asteroid in asteroidHitList)
-                {
-                    if(bullet.CheckHit(asteroid))
-                    {
-                        bullet.Hit();
-                        asteroid.Hit();
-                    }
-                }
-            }
-            */
         }
 
         /// <summary>
@@ -185,6 +175,35 @@ namespace SharpLesson1
             foreach (BaseObject obj in _objs)
                 obj.Update();
 
+            //переписал код из методички, потому что это какая-то жесть...
+            foreach (var bullet in bulletHitList)
+            {
+                foreach (var asteroid in asteroidHitList)
+                {
+                    if (bullet.CheckHit(asteroid))
+                    {
+                        garbage.Add(bullet);
+                        garbage.Add(asteroid);
+                        //bullet.Hit();
+                        asteroid.Hit();
+                    }
+                }
+            }
+
+            foreach (var garbageItem in garbage)
+            {
+                _objs.Remove(garbageItem);
+                if (garbageItem is Bullet)
+                {
+                    Bullet bullet = garbageItem as Bullet;
+                    bulletHitList.Remove(bullet);
+
+                    bullet.Dispose();
+                    bullet = null;
+                }
+            }
+
+            /*
             _bullet?.Update();
             for (var i = 0; i < asteroidHitList.Count; i++)
             {
@@ -204,6 +223,7 @@ namespace SharpLesson1
                 System.Media.SystemSounds.Asterisk.Play();
                 if (_ship.Energy <= 0) _ship?.Die();
             }
+            */
         }
 
         /// <summary>

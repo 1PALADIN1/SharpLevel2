@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SharpLesson1
 {
-    class Bullet : BaseObject, IHitable
+    class Bullet : BaseObject
     {
         public readonly static int maxSpeed = -9;
         public readonly static int minSpeed = -25;
@@ -35,6 +35,7 @@ namespace SharpLesson1
             pos.X = pos.X - dir.X;
             if (pos.X > Game.Width)
             {
+                Game.garbage.Add(this);
             }
         }
 
@@ -75,6 +76,11 @@ namespace SharpLesson1
         {
             //ChangeSpeed();
             //ChangePosition();
+        }
+
+        public void Dispose()
+        {
+            image = null;
         }
     }
 }
