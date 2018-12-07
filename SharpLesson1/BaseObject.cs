@@ -41,7 +41,8 @@ namespace SharpLesson1
         public virtual void Draw()
         {
             //Game.buffer.Graphics.DrawEllipse(Pens.White, pos.X, pos.Y, size.Width, size.Height);
-            Game.buffer.Graphics.DrawImage(image, pos.X, pos.Y, size.Width, size.Height);
+            if (image != null)
+                Game.buffer.Graphics.DrawImage(image, pos.X, pos.Y, size.Width, size.Height);
         }
 
         public abstract void Update();

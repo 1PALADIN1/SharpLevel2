@@ -12,8 +12,9 @@ namespace SharpLesson1
     {
         private static readonly int ITER_NUM = 20;
         private static BufferedGraphicsContext _context;
-        private static List<Bullet> bulletHitList;
-        private static List<Asteroid> asteroidHitList;
+        private static List<Bullet> bulletHitList; //пули
+        private static List<Asteroid> asteroidHitList; //астероиды
+        private static List<Chest> chestHitList; //аптечки
         private static int height;
         private static int width;
         private static Ship _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(Ship.minSize, Ship.minSize));
@@ -57,6 +58,7 @@ namespace SharpLesson1
             _objs = new List<BaseObject>();
             bulletHitList = new List<Bullet>();
             asteroidHitList = new List<Asteroid>();
+            chestHitList = new List<Chest>();
             Random rnd = new Random();
             int size = 0;
 
@@ -70,7 +72,9 @@ namespace SharpLesson1
                 _objs.Add(asteroid);
                 asteroidHitList.Add(asteroid);
                 //звезды
-                _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0), new Size(Star.starSize, Star.starSize)));
+                _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)),
+                    new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0),
+                    new Size(Star.starSize, Star.starSize)));
                 //корабли
                 //size = rnd.Next(Ship.minSize, Ship.maxSize + 1);
                 //_objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
@@ -85,7 +89,11 @@ namespace SharpLesson1
             //аптечки
             for (int i = 0; i < 5; i++)
             {
-                _objs.Add(new Chest(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Chest.minSpeed, Chest.maxSpeed), 0), new Size(Chest.minSize, Chest.minSize)));
+                Chest chest = new Chest(new Point(Width, rnd.Next(0, Height + 1)),
+                    new Point(rnd.Next(Chest.minSpeed, Chest.maxSpeed), 0),
+                    new Size(Chest.minSize, Chest.minSize));
+                _objs.Add(chest);
+                chestHitList.Add(chest);
             }
 
             _objs.Add(_ship);
@@ -175,7 +183,15 @@ namespace SharpLesson1
             foreach (BaseObject obj in _objs)
                 obj.Update();
 
-            //переписал код из методички, потому что это какая-то жесть...
+            CollisionCheck();
+        }
+
+        /// <summary>
+        /// Метод обработки столкновений
+        /// </summary>
+        private static void CollisionCheck()
+        {
+            //столкновение пуль и астероидов
             foreach (var bullet in bulletHitList)
             {
                 foreach (var asteroid in asteroidHitList)
@@ -186,10 +202,34 @@ namespace SharpLesson1
                         garbage.Add(asteroid);
                         //bullet.Hit();
                         asteroid.Hit();
+                        HIT_COUNT++;
                     }
                 }
             }
 
+            //столкновения корабля с объектами
+            foreach (var item in _objs)
+            {
+                if (_ship.CheckHit(item))
+                {
+
+                    if (item is Chest)
+                    {
+                        (item as Chest).Hit();
+                        _ship?.EnergyUp(Rnd.Next(1, 10));
+                    }
+
+                    if (item is Asteroid)
+                    {
+                        (item as Asteroid).Hit();
+                        _ship?.EnergyLow(Rnd.Next(1, 10));
+                        System.Media.SystemSounds.Asterisk.Play();
+                        if (_ship.Energy <= 0) _ship?.Die();
+                    }
+                }
+            }
+
+            //очистка пуль (пробный вариант)
             foreach (var garbageItem in garbage)
             {
                 _objs.Remove(garbageItem);

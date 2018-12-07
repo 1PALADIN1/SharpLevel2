@@ -9,7 +9,8 @@ namespace SharpLesson1
 {
     class Ship : BaseObject
     {
-        private int _energy = 100;
+        private static readonly int MAX_ENERGY = 100;
+        private int _energy = MAX_ENERGY;
         public int Energy => _energy;
 
         private bool grow;
@@ -28,6 +29,17 @@ namespace SharpLesson1
         public void EnergyLow(int n)
         {
             _energy -= n;
+        }
+
+        /// <summary>
+        /// Метод добавляющий энергию корабля
+        /// </summary>
+        /// <param name="n">Количество добавляемых единиц энергии за тик таймера</param>
+        public void EnergyUp(int n)
+        {
+            if ((_energy + n) > MAX_ENERGY) _energy = MAX_ENERGY;
+            else
+                _energy += n;
         }
 
         /// <summary>

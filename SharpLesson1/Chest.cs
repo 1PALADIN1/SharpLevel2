@@ -54,5 +54,14 @@ namespace SharpLesson1
             pos.X = Game.Width + size.Width;
             pos.Y = rnd.Next(0, Game.Height + 1);
         }
+
+        /// <summary>
+        /// Метод обрабатывающий столкновения объектов
+        /// </summary>
+        public void Hit()
+        {
+            ChangeSpeed();
+            ChangePosition();
+        }
     }
 }
