@@ -52,6 +52,7 @@
     <Compile Include="Chest.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="IHitable.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Ship.cs" />
