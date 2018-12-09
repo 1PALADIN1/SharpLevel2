@@ -10,6 +10,7 @@ namespace SharpLesson1
 {
     class Game
     {
+        public static readonly bool DEBUG_MODE = false; //режим отладки
         private static readonly int ITER_NUM = 20;
         private static BufferedGraphicsContext _context;
         private static List<Bullet> bulletHitList; //пули
@@ -17,7 +18,7 @@ namespace SharpLesson1
         private static List<Chest> chestHitList; //аптечки
         private static int height;
         private static int width;
-        private static Ship _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(Ship.minSize, Ship.minSize));
+        private static Ship _ship = new Ship(new Point(10, 400), new Point(10, 10), new Size(Ship.minSize, Ship.minSize));
         private static Bullet _bullet;
         public static BufferedGraphics buffer;
         public static List<BaseObject> _objs;
@@ -75,15 +76,6 @@ namespace SharpLesson1
                 _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)),
                     new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0),
                     new Size(Star.starSize, Star.starSize)));
-                //корабли
-                //size = rnd.Next(Ship.minSize, Ship.maxSize + 1);
-                //_objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
-                //пули
-                //Bullet bullet = new Bullet(new Point(0, rnd.Next(0, Height + 1)),
-                //    new Point(rnd.Next(Bullet.minSpeed, Bullet.maxSpeed), 0),
-                //    new Size(Bullet.bulletSize, Bullet.bulletSize));
-                //_objs.Add(bullet);
-                //bulletHitList.Add(bullet);
             }
 
             //аптечки
@@ -134,7 +126,7 @@ namespace SharpLesson1
         {
             if (e.KeyCode == Keys.A)
             {
-                _bullet = new Bullet(new Point(_ship.Position.X + 10, _ship.Position.Y + 4),
+                _bullet = new Bullet(new Point(_ship.Position.X + _ship.ObjectSize.Width / 2, _ship.Position.Y + _ship.ObjectSize.Height / 4),
                     new Point(Bullet.maxSpeed, 0), new Size(Bullet.bulletSize, Bullet.bulletSize));
                 _objs.Add(_bullet);
                 bulletHitList.Add(_bullet);
@@ -188,6 +180,7 @@ namespace SharpLesson1
             CollisionCheck();
         }
 
+        #region проверка столкновений
         /// <summary>
         /// Метод обработки столкновений
         /// </summary>
@@ -201,7 +194,7 @@ namespace SharpLesson1
                     if (bullet.CheckHit(asteroid))
                     {
                         garbage.Add(bullet);
-                        garbage.Add(asteroid);
+                        //garbage.Add(asteroid);
                         //bullet.Hit();
                         asteroid.Hit();
                         HIT_COUNT++;
@@ -253,29 +246,8 @@ namespace SharpLesson1
                     bullet = null;
                 }
             }
-
-            /*
-            _bullet?.Update();
-            for (var i = 0; i < asteroidHitList.Count; i++)
-            {
-                if (asteroidHitList[i] == null) continue;
-                asteroidHitList[i].Update();
-                if (_bullet != null && _bullet.CheckHit(asteroidHitList[i]))
-                {
-                    System.Media.SystemSounds.Hand.Play();
-                    asteroidHitList[i] = null;
-                    _bullet = null;
-                    HIT_COUNT++;
-                    continue;
-                }
-                if (!_ship.CheckHit(asteroidHitList[i])) continue;
-                var rnd = new Random();
-                _ship?.EnergyLow(rnd.Next(1, 10));
-                System.Media.SystemSounds.Asterisk.Play();
-                if (_ship.Energy <= 0) _ship?.Die();
-            }
-            */
         }
+        #endregion
 
         /// <summary>
         /// Метод завершения игры

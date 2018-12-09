@@ -12,7 +12,7 @@ namespace SharpLesson1
         public readonly static int maxSpeed = -9;
         public readonly static int minSpeed = -25;
         public readonly static int maxSize = 30;
-        public readonly static int minSize = 5;
+        public readonly static int minSize = 15;
 
         private Random rnd;
 
@@ -56,19 +56,6 @@ namespace SharpLesson1
         {
             pos.X = Game.Width + size.Width;
             pos.Y = rnd.Next(0, Game.Height + 1);
-        }
-
-        /// <summary>
-        /// Проверка на столкновение объектов
-        /// </summary>
-        /// <param name="other">Объект типа BaseObject</param>
-        /// <returns>Возвращает истину, если столкновение было обнаружено</returns>
-        public bool CheckHit(BaseObject other)
-        {
-            if (other.Position.X <= (pos.X + size.Width/2) && other.Position.X >= (pos.X - size.Width/2)
-                && other.Position.Y <= (pos.Y + size.Height/2) && other.Position.Y >= (pos.Y - size.Height/2))
-                return true;
-            return false;
         }
 
         /// <summary>

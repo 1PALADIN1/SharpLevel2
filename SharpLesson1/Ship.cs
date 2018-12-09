@@ -18,7 +18,7 @@ namespace SharpLesson1
         public readonly static int maxSpeed = -5;
         public readonly static int minSpeed = -15;
         public readonly static int maxSize = 30;
-        public readonly static int minSize = 10;
+        public readonly static int minSize = 20;
 
         public static event Message MessageDie;
 
@@ -83,19 +83,6 @@ namespace SharpLesson1
         public void Die()
         {
             MessageDie?.Invoke();
-        }
-
-        /// <summary>
-        /// Проверка на столкновение объектов
-        /// </summary>
-        /// <param name="other">Объект типа BaseObject</param>
-        /// <returns>Возвращает истину, если столкновение было обнаружено</returns>
-        public bool CheckHit(BaseObject other)
-        {
-            if (other.Position.X <= (pos.X + size.Width / 2) && other.Position.X >= (pos.X - size.Width / 2)
-                && other.Position.Y <= (pos.Y + size.Height / 2) && other.Position.Y >= (pos.Y - size.Height / 2))
-                return true;
-            return false;
         }
 
         /// <summary>

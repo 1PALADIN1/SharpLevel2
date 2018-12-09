@@ -21,6 +21,11 @@ namespace SharpLesson1
             get => pos;
         }
 
+        public Size ObjectSize
+        {
+            get => size;
+        }
+
         /// <summary>
         /// Инициализация базового объекта
         /// </summary>
@@ -43,8 +48,30 @@ namespace SharpLesson1
             //Game.buffer.Graphics.DrawEllipse(Pens.White, pos.X, pos.Y, size.Width, size.Height);
             if (image != null)
                 Game.buffer.Graphics.DrawImage(image, pos.X, pos.Y, size.Width, size.Height);
+
+            if (Game.DEBUG_MODE)
+            {
+                Game.buffer.Graphics.DrawLine(Pens.Red, pos.X + size.Width, pos.Y + size.Height, pos.X, pos.Y);
+            }
         }
 
         public abstract void Update();
+
+        /// <summary>
+        /// Проверка на столкновение объектов
+        /// </summary>
+        /// <param name="other">Объект типа BaseObject</param>
+        /// <returns>Возвращает истину, если столкновение было обнаружено</returns>
+        public bool CheckHit(BaseObject other)
+        {
+            //if (other.Position.X <= (pos.X + size.Width) && other.Position.X >= pos.X
+            //    && other.Position.Y <= (pos.Y + size.Height) && other.Position.Y >= pos.Y)
+            //    return true;
+
+            if ((pos.X + size.Width / 2) <= (other.Position.X + other.size.Width) && (pos.X + size.Width / 2) >= other.Position.X
+                && (pos.Y + size.Height /2) <= (other.Position.Y + other.size.Height) && (pos.Y + size.Height / 2) >= other.Position.Y)
+                return true;
+            return false;
+        }
     }
 }
