@@ -19,6 +19,12 @@ namespace SharpLesson1
 
         Random rnd;
 
+        /// <summary>
+        /// Инициализация объекта аптечки
+        /// </summary>
+        /// <param name="pos">Начальная позиция</param>
+        /// <param name="dir">Направление</param>
+        /// <param name="size">Размер</param>
         public Chest(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             rnd = new Random();

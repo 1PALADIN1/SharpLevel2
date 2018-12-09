@@ -56,6 +56,9 @@ namespace SharpLesson1
             pos.Y = rnd.Next(0, Game.Height + 1);
         }
 
+        /// <summary>
+        /// Освобождение ресурсов
+        /// </summary>
         public void Dispose()
         {
             image = null;

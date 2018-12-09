@@ -146,8 +146,8 @@ namespace SharpLesson1
         /// <summary>
         /// Обработка нажатия клавиш
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Объект, который вызвал метод</param>
+        /// <param name="e">Параметры вызова</param>
         private static void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.A)
@@ -161,6 +161,11 @@ namespace SharpLesson1
             if (e.KeyCode == Keys.Down) _ship.Down();
         }
 
+        /// <summary>
+        /// Метод выполняющий обновление и отрисовку объектов каждый тик таймера
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал метод</param>
+        /// <param name="e">Параметры вызова</param>
         private static void Timer_Tick(object sender, EventArgs e)
         {
             Draw();

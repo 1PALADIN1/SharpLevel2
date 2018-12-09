@@ -67,6 +67,9 @@ namespace SharpLesson1
             ChangePosition();
         }
 
+        /// <summary>
+        /// Освобождение ресурсов
+        /// </summary>
         public void Dispose()
         {
             image = null;
