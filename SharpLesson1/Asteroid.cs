@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SharpLesson1
 {
-    class Asteroid : BaseObject, IHitable
+    class Asteroid : BaseObject, IDisposable
     {
         public readonly static int maxSpeed = -9;
         public readonly static int minSpeed = -25;
@@ -65,6 +65,11 @@ namespace SharpLesson1
         {
             ChangeSpeed();
             ChangePosition();
+        }
+
+        public void Dispose()
+        {
+            image = null;
         }
     }
 }

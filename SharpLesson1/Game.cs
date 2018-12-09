@@ -12,13 +12,14 @@ namespace SharpLesson1
     {
         public static readonly bool DEBUG_MODE = false; //режим отладки
         private static readonly int ITER_NUM = 20;
+        private static int asteroidNumber = 10; //количество астероидов на карте при инициализации
         private static BufferedGraphicsContext _context;
         private static List<Bullet> bulletHitList; //пули
         private static List<Asteroid> asteroidHitList; //астероиды
         private static List<Chest> chestHitList; //аптечки
         private static int height;
         private static int width;
-        private static Ship _ship = new Ship(new Point(10, 400), new Point(10, 10), new Size(Ship.minSize, Ship.minSize));
+        private static Ship _ship = new Ship(new Point(10, 400), new Point(10, 10), new Size(Ship.minSize, Ship.minSize)); //корабль-игрок
         private static Bullet _bullet;
         public static BufferedGraphics buffer;
         public static List<BaseObject> _objs;
@@ -26,13 +27,15 @@ namespace SharpLesson1
         public static List<BaseObject> garbage;
         public static Random Rnd = new Random();
         public static int HIT_COUNT; //количество очков
+        private static int OBJECT_ARRAY_SIZE = 0;
 
         public static int Height
         {
             get => height;
             set
             {
-                if (value > 1000 || value <= 0) throw new ArgumentOutOfRangeException("Высота экрана не должна быть больше 1000 пикселей или отрицательной");
+                if (value > 1000 || value <= 0)
+                    throw new ArgumentOutOfRangeException("Высота экрана не должна быть больше 1000 пикселей или отрицательной");
                 height = value;
             }
         }
@@ -41,7 +44,8 @@ namespace SharpLesson1
             get => width;
             set
             {
-                if (value > 1000 || value <= 0) throw new ArgumentOutOfRangeException("Ширина экрана не должна быть больше 1000 пикселей или отрицательной");
+                if (value > 1000 || value <= 0)
+                    throw new ArgumentOutOfRangeException("Ширина экрана не должна быть больше 1000 пикселей или отрицательной");
                 width = value;
             }
         }
@@ -51,6 +55,7 @@ namespace SharpLesson1
 
         }
 
+        #region инициализация игровых объектов
         /// <summary>
         /// Загрузка объектов
         /// </summary>
@@ -61,17 +66,10 @@ namespace SharpLesson1
             asteroidHitList = new List<Asteroid>();
             chestHitList = new List<Chest>();
             Random rnd = new Random();
-            int size = 0;
 
             for (int i = 0; i < ITER_NUM; i++)
             {
-                size = rnd.Next(Asteroid.minSize, Asteroid.maxSize + 1);
-                //астероиды
-                Asteroid asteroid = new Asteroid(new Point(Width, rnd.Next(0, Height + 1)),
-                    new Point(rnd.Next(Asteroid.minSpeed, Asteroid.maxSpeed), 0),
-                    new Size(size, size));
-                _objs.Add(asteroid);
-                asteroidHitList.Add(asteroid);
+                
                 //звезды
                 _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)),
                     new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0),
@@ -88,7 +86,29 @@ namespace SharpLesson1
                 chestHitList.Add(chest);
             }
 
+            //астероиды
+            FillAsteroids();
+
             _objs.Add(_ship);
+        }
+
+        /// <summary>
+        /// Заполнение игрового поля астероидами
+        /// </summary>
+        private static void FillAsteroids()
+        {
+            int size = 0;
+            Random rnd = new Random();
+
+            for (int i = 0; i < asteroidNumber; i++)
+            {
+                size = rnd.Next(Asteroid.minSize, Asteroid.maxSize + 1);
+                Asteroid asteroid = new Asteroid(new Point(Width, rnd.Next(0, Height + 1)),
+                    new Point(rnd.Next(Asteroid.minSpeed, Asteroid.maxSpeed), 0),
+                    new Size(size, size));
+                _objs.Add(asteroid);
+                asteroidHitList.Add(asteroid);
+            }
         }
 
         /// <summary>
@@ -121,7 +141,13 @@ namespace SharpLesson1
             form.KeyDown += Form_KeyDown;
             Ship.MessageDie += Finish;
         }
+        #endregion
 
+        /// <summary>
+        /// Обработка нажатия клавиш
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.A)
@@ -165,6 +191,8 @@ namespace SharpLesson1
                                     SystemFonts.DefaultFont, Brushes.White, 0, 0);
                 buffer.Graphics.DrawString("Points:" + HIT_COUNT,
                                     SystemFonts.DefaultFont, Brushes.White, 0, 20);
+                buffer.Graphics.DrawString("Array size:" + OBJECT_ARRAY_SIZE,
+                                    SystemFonts.DefaultFont, Brushes.White, 0, 40);
             }
             buffer.Render();
         }
@@ -178,6 +206,13 @@ namespace SharpLesson1
                 obj.Update();
 
             CollisionCheck();
+
+            //повоторная инициализация массива астероидов (задание 1)
+            if (asteroidHitList.Count == 0)
+            {
+                asteroidNumber++;
+                FillAsteroids();
+            }
         }
 
         #region проверка столкновений
@@ -194,7 +229,7 @@ namespace SharpLesson1
                     if (bullet.CheckHit(asteroid))
                     {
                         garbage.Add(bullet);
-                        //garbage.Add(asteroid);
+                        garbage.Add(asteroid);
                         //bullet.Hit();
                         asteroid.Hit();
                         HIT_COUNT++;
@@ -209,7 +244,6 @@ namespace SharpLesson1
             {
                 if (_ship.CheckHit(item))
                 {
-
                     if (item is Chest)
                     {
                         (item as Chest).Hit();
@@ -245,7 +279,20 @@ namespace SharpLesson1
                     bullet.Dispose();
                     bullet = null;
                 }
+                if (garbageItem is Asteroid)
+                {
+                    Asteroid asteroid = garbageItem as Asteroid;
+                    asteroidHitList.Remove(asteroid);
+
+                    asteroid.Dispose();
+                    asteroid = null;
+                }
             }
+
+            //очистка массива с мусором
+            if (garbage.Count > 20) garbage.Clear();
+
+            OBJECT_ARRAY_SIZE = asteroidHitList.Count;
         }
         #endregion
 
