@@ -7,12 +7,12 @@ using System.Drawing;
 
 namespace SharpLesson1
 {
-    class Asteroid : BaseObject, IHitable
+    class Asteroid : BaseObject, IDisposable
     {
         public readonly static int maxSpeed = -9;
         public readonly static int minSpeed = -25;
         public readonly static int maxSize = 30;
-        public readonly static int minSize = 5;
+        public readonly static int minSize = 15;
 
         private Random rnd;
 
@@ -59,25 +59,20 @@ namespace SharpLesson1
         }
 
         /// <summary>
-        /// Проверка на столкновение объектов
-        /// </summary>
-        /// <param name="other">Объект типа BaseObject</param>
-        /// <returns>Возвращает истину, если столкновение было обнаружено</returns>
-        public bool CheckHit(BaseObject other)
-        {
-            if (other.Position.X <= (pos.X + size.Width/2) && other.Position.X >= (pos.X - size.Width/2)
-                && other.Position.Y <= (pos.Y + size.Height/2) && other.Position.Y >= (pos.Y - size.Height/2))
-                return true;
-            return false;
-        }
-
-        /// <summary>
         /// Метод обрабатывающий столкновения объектов
         /// </summary>
         public void Hit()
         {
             ChangeSpeed();
             ChangePosition();
+        }
+
+        /// <summary>
+        /// Освобождение ресурсов
+        /// </summary>
+        public void Dispose()
+        {
+            image = null;
         }
     }
 }

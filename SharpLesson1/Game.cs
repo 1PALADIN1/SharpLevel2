@@ -10,14 +10,16 @@ namespace SharpLesson1
 {
     class Game
     {
+        public static readonly bool DEBUG_MODE = false; //режим отладки
         private static readonly int ITER_NUM = 20;
+        private static int asteroidNumber = 10; //количество астероидов на карте при инициализации
         private static BufferedGraphicsContext _context;
         private static List<Bullet> bulletHitList; //пули
         private static List<Asteroid> asteroidHitList; //астероиды
         private static List<Chest> chestHitList; //аптечки
         private static int height;
         private static int width;
-        private static Ship _ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(Ship.minSize, Ship.minSize));
+        private static Ship _ship = new Ship(new Point(10, 400), new Point(10, 10), new Size(Ship.minSize, Ship.minSize)); //корабль-игрок
         private static Bullet _bullet;
         public static BufferedGraphics buffer;
         public static List<BaseObject> _objs;
@@ -25,13 +27,15 @@ namespace SharpLesson1
         public static List<BaseObject> garbage;
         public static Random Rnd = new Random();
         public static int HIT_COUNT; //количество очков
+        private static int OBJECT_ARRAY_SIZE = 0;
 
         public static int Height
         {
             get => height;
             set
             {
-                if (value > 1000 || value <= 0) throw new ArgumentOutOfRangeException("Высота экрана не должна быть больше 1000 пикселей или отрицательной");
+                if (value > 1000 || value <= 0)
+                    throw new ArgumentOutOfRangeException("Высота экрана не должна быть больше 1000 пикселей или отрицательной");
                 height = value;
             }
         }
@@ -40,7 +44,8 @@ namespace SharpLesson1
             get => width;
             set
             {
-                if (value > 1000 || value <= 0) throw new ArgumentOutOfRangeException("Ширина экрана не должна быть больше 1000 пикселей или отрицательной");
+                if (value > 1000 || value <= 0)
+                    throw new ArgumentOutOfRangeException("Ширина экрана не должна быть больше 1000 пикселей или отрицательной");
                 width = value;
             }
         }
@@ -50,6 +55,7 @@ namespace SharpLesson1
 
         }
 
+        #region инициализация игровых объектов
         /// <summary>
         /// Загрузка объектов
         /// </summary>
@@ -60,30 +66,14 @@ namespace SharpLesson1
             asteroidHitList = new List<Asteroid>();
             chestHitList = new List<Chest>();
             Random rnd = new Random();
-            int size = 0;
 
             for (int i = 0; i < ITER_NUM; i++)
             {
-                size = rnd.Next(Asteroid.minSize, Asteroid.maxSize + 1);
-                //астероиды
-                Asteroid asteroid = new Asteroid(new Point(Width, rnd.Next(0, Height + 1)),
-                    new Point(rnd.Next(Asteroid.minSpeed, Asteroid.maxSpeed), 0),
-                    new Size(size, size));
-                _objs.Add(asteroid);
-                asteroidHitList.Add(asteroid);
+                
                 //звезды
                 _objs.Add(new Star(new Point(Width, rnd.Next(0, Height + 1)),
                     new Point(rnd.Next(Star.minSpeed, Star.maxSpeed), 0),
                     new Size(Star.starSize, Star.starSize)));
-                //корабли
-                //size = rnd.Next(Ship.minSize, Ship.maxSize + 1);
-                //_objs.Add(new Ship(new Point(Width, rnd.Next(0, Height + 1)), new Point(rnd.Next(Ship.minSpeed, Ship.maxSpeed), 0), new Size(size, size)));
-                //пули
-                //Bullet bullet = new Bullet(new Point(0, rnd.Next(0, Height + 1)),
-                //    new Point(rnd.Next(Bullet.minSpeed, Bullet.maxSpeed), 0),
-                //    new Size(Bullet.bulletSize, Bullet.bulletSize));
-                //_objs.Add(bullet);
-                //bulletHitList.Add(bullet);
             }
 
             //аптечки
@@ -96,7 +86,29 @@ namespace SharpLesson1
                 chestHitList.Add(chest);
             }
 
+            //астероиды
+            FillAsteroids();
+
             _objs.Add(_ship);
+        }
+
+        /// <summary>
+        /// Заполнение игрового поля астероидами
+        /// </summary>
+        private static void FillAsteroids()
+        {
+            int size = 0;
+            Random rnd = new Random();
+
+            for (int i = 0; i < asteroidNumber; i++)
+            {
+                size = rnd.Next(Asteroid.minSize, Asteroid.maxSize + 1);
+                Asteroid asteroid = new Asteroid(new Point(Width, rnd.Next(0, Height + 1)),
+                    new Point(rnd.Next(Asteroid.minSpeed, Asteroid.maxSpeed), 0),
+                    new Size(size, size));
+                _objs.Add(asteroid);
+                asteroidHitList.Add(asteroid);
+            }
         }
 
         /// <summary>
@@ -118,7 +130,7 @@ namespace SharpLesson1
             // Связываем буфер в памяти с графическим объектом, чтобы рисовать в буфере
             buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
-            BaseObject.Log(() => { return "Запуск корабля и начало игры!"; } );
+            Log.LogConsole(() => { return "Запуск корабля и начало игры!"; } );
 
             Load();
 
@@ -129,12 +141,18 @@ namespace SharpLesson1
             form.KeyDown += Form_KeyDown;
             Ship.MessageDie += Finish;
         }
+        #endregion
 
+        /// <summary>
+        /// Обработка нажатия клавиш
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал метод</param>
+        /// <param name="e">Параметры вызова</param>
         private static void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.A)
             {
-                _bullet = new Bullet(new Point(_ship.Position.X + 10, _ship.Position.Y + 4),
+                _bullet = new Bullet(new Point(_ship.Position.X + _ship.ObjectSize.Width / 2, _ship.Position.Y + _ship.ObjectSize.Height / 4),
                     new Point(Bullet.maxSpeed, 0), new Size(Bullet.bulletSize, Bullet.bulletSize));
                 _objs.Add(_bullet);
                 bulletHitList.Add(_bullet);
@@ -143,6 +161,11 @@ namespace SharpLesson1
             if (e.KeyCode == Keys.Down) _ship.Down();
         }
 
+        /// <summary>
+        /// Метод выполняющий обновление и отрисовку объектов каждый тик таймера
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал метод</param>
+        /// <param name="e">Параметры вызова</param>
         private static void Timer_Tick(object sender, EventArgs e)
         {
             Draw();
@@ -173,6 +196,8 @@ namespace SharpLesson1
                                     SystemFonts.DefaultFont, Brushes.White, 0, 0);
                 buffer.Graphics.DrawString("Points:" + HIT_COUNT,
                                     SystemFonts.DefaultFont, Brushes.White, 0, 20);
+                buffer.Graphics.DrawString("Array size:" + OBJECT_ARRAY_SIZE,
+                                    SystemFonts.DefaultFont, Brushes.White, 0, 40);
             }
             buffer.Render();
         }
@@ -186,8 +211,16 @@ namespace SharpLesson1
                 obj.Update();
 
             CollisionCheck();
+
+            //повоторная инициализация массива астероидов (задание 1)
+            if (asteroidHitList.Count == 0)
+            {
+                asteroidNumber++;
+                FillAsteroids();
+            }
         }
 
+        #region проверка столкновений
         /// <summary>
         /// Метод обработки столкновений
         /// </summary>
@@ -206,7 +239,7 @@ namespace SharpLesson1
                         asteroid.Hit();
                         HIT_COUNT++;
 
-                        BaseObject.Log(() => { return "Астероид сбит"; });
+                        Log.LogConsole(() => { return "Астероид сбит"; });
                     }
                 }
             }
@@ -216,12 +249,11 @@ namespace SharpLesson1
             {
                 if (_ship.CheckHit(item))
                 {
-
                     if (item is Chest)
                     {
                         (item as Chest).Hit();
                         _ship?.EnergyUp(Rnd.Next(1, 10));
-                        BaseObject.Log(() => { return "Энергия увеличина"; });
+                        Log.LogConsole(() => { return "Энергия увеличина"; });
                     }
 
                     if (item is Asteroid)
@@ -229,12 +261,12 @@ namespace SharpLesson1
                         (item as Asteroid).Hit();
                         _ship?.EnergyLow(Rnd.Next(1, 10));
                         System.Media.SystemSounds.Asterisk.Play();
-                        BaseObject.Log(() => { return "Попадание астероида по кораблю"; });
+                        Log.LogConsole(() => { return "Попадание астероида по кораблю"; });
 
                         if (_ship.Energy <= 0)
                         {
                             _ship?.Die();
-                            BaseObject.Log(() => { return "Корабль уничтожен..."; });
+                            Log.LogConsole(() => { return "Корабль уничтожен..."; });
                         }
                     }
                 }
@@ -252,30 +284,22 @@ namespace SharpLesson1
                     bullet.Dispose();
                     bullet = null;
                 }
+                if (garbageItem is Asteroid)
+                {
+                    Asteroid asteroid = garbageItem as Asteroid;
+                    asteroidHitList.Remove(asteroid);
+
+                    asteroid.Dispose();
+                    asteroid = null;
+                }
             }
 
-            /*
-            _bullet?.Update();
-            for (var i = 0; i < asteroidHitList.Count; i++)
-            {
-                if (asteroidHitList[i] == null) continue;
-                asteroidHitList[i].Update();
-                if (_bullet != null && _bullet.CheckHit(asteroidHitList[i]))
-                {
-                    System.Media.SystemSounds.Hand.Play();
-                    asteroidHitList[i] = null;
-                    _bullet = null;
-                    HIT_COUNT++;
-                    continue;
-                }
-                if (!_ship.CheckHit(asteroidHitList[i])) continue;
-                var rnd = new Random();
-                _ship?.EnergyLow(rnd.Next(1, 10));
-                System.Media.SystemSounds.Asterisk.Play();
-                if (_ship.Energy <= 0) _ship?.Die();
-            }
-            */
+            //очистка массива с мусором
+            if (garbage.Count > 20) garbage.Clear();
+
+            OBJECT_ARRAY_SIZE = asteroidHitList.Count;
         }
+        #endregion
 
         /// <summary>
         /// Метод завершения игры
