@@ -20,6 +20,23 @@ namespace EmployeeWPF.Model
             get => $"{lastName} {firstName}";
         }
 
+        public string FirstName
+        {
+            get => firstName;
+            set => firstName = value;
+        }
+
+        public string LastName
+        {
+            get => lastName;
+            set => lastName = value;
+        }
+
+        public Department Department
+        {
+            get => department;
+        }
+
         /// <summary>
         /// Инициализация нового сотрудника
         /// </summary>

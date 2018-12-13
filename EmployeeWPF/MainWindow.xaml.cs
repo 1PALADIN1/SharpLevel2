@@ -43,8 +43,8 @@ namespace EmployeeWPF
             FillTestData();
 
             //привязка к представлению
-            employeeListView.ItemsSource = employeeList;
-            departmentListView.ItemsSource = departmentList;
+            employeeListBox.ItemsSource = employeeList;
+            departmentListBox.ItemsSource = departmentList;
         }
 
         /// <summary>
@@ -71,6 +71,67 @@ namespace EmployeeWPF
             employeeList.Add(new Employee("Наталья", "Ильина", d1));
             employeeList.Add(new Employee("Ирина", "Иванова", d2));
             employeeList.Add(new Employee("Виктория", "Ильичева", d5));
+        }
+
+        /// <summary>
+        /// Обработчик событий переключения между подразделениями в списке
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void DepartmentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (departmentListBox.SelectedItem is Department department)
+            {
+                tbDepartmentName.Text = department.Name;
+            }
+        }
+
+        /// <summary>
+        /// Обработчик событий переключения между сотрудниками в списке
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void EmployeeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (employeeListBox.SelectedItem is Employee employee)
+            {
+                tbEmployeeFirstName.Text = employee.FirstName;
+                tbEmployeeLastName.Text = employee.LastName;
+                tbEmployeeDeprtment.Text = employee.Department.Name;
+            }
+        }
+
+        /// <summary>
+        /// Сохранение отредактированных данных
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (departmentListBox.SelectedItem is Department department)
+            {
+                department.Name = tbDepartmentName.Text;
+            }
+
+            if (employeeListBox.SelectedItem is Employee employee)
+            {
+                employee.FirstName = tbEmployeeFirstName.Text;
+                employee.LastName = tbEmployeeLastName.Text;
+            }
+
+            RefreshData();
+        }
+
+        /// <summary>
+        /// Обновление данных на экране
+        /// </summary>
+        private void RefreshData()
+        {
+            //списки
+            departmentListBox.ItemsSource = null;
+            departmentListBox.ItemsSource = departmentList;
+            employeeListBox.ItemsSource = null;
+            employeeListBox.ItemsSource = employeeList;
         }
     }
 }

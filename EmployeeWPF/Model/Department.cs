@@ -16,6 +16,7 @@ namespace EmployeeWPF.Model
         public string Name
         {
             get => name;
+            set => name = value;
         }
 
         /// <summary>
