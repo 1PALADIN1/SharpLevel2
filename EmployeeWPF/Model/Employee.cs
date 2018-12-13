@@ -32,5 +32,14 @@ namespace EmployeeWPF.Model
             this.lastName = lastName;
             this.department = department;
         }
+
+        /// <summary>
+        /// Переопределение метода ToString()
+        /// </summary>
+        /// <returns>Полное имя сотрудника</returns>
+        public override string ToString()
+        {
+            return FullName;
+        }
     }
 }

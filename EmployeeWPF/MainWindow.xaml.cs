@@ -41,6 +41,10 @@ namespace EmployeeWPF
 
             //заполнение тестовыми данными
             FillTestData();
+
+            //привязка к представлению
+            employeeListView.ItemsSource = employeeList;
+            departmentListView.ItemsSource = departmentList;
         }
 
         /// <summary>
