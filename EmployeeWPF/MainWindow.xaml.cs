@@ -24,11 +24,16 @@ namespace EmployeeWPF
     {
         private ObservableCollection<Employee> employeeList;
         private ObservableCollection<Department> departmentList;
-
+        
         public MainWindow()
         {
             InitializeComponent();
             InitData();
+        }
+
+        public ListBox EmployeeListBox
+        {
+            get => employeeListBox;
         }
 
         /// <summary>
@@ -36,41 +41,14 @@ namespace EmployeeWPF
         /// </summary>
         private void InitData()
         {
-            departmentList = new ObservableCollection<Department>();
-            employeeList = new ObservableCollection<Employee>();
+            DataController.FillTestData();
 
-            //заполнение тестовыми данными
-            FillTestData();
+            employeeList = DataController.employeeList;
+            departmentList = DataController.departmentList;
 
             //привязка к представлению
             employeeListBox.ItemsSource = employeeList;
             departmentListBox.ItemsSource = departmentList;
-        }
-
-        /// <summary>
-        /// Заполнение списков тестовыми данными (временная функция)
-        /// </summary>
-        private void FillTestData()
-        {
-            Department d1 = new Department("Главрыба");
-            Department d2 = new Department("Look Oil");
-            Department d3 = new Department("PinApple");
-            Department d4 = new Department("Дворик в деревне");
-            Department d5 = new Department("Man & Woman");
-
-            departmentList.Add(d1);
-            departmentList.Add(d2);
-            departmentList.Add(d3);
-            departmentList.Add(d4);
-            departmentList.Add(d5);
-
-            employeeList.Add(new Employee("Иван", "Каретников", d1));
-            employeeList.Add(new Employee("Анатолий", "Жлобин", d2));
-            employeeList.Add(new Employee("Евгения", "Зайцева", d4));
-            employeeList.Add(new Employee("Илья", "Татаров", d3));
-            employeeList.Add(new Employee("Наталья", "Ильина", d1));
-            employeeList.Add(new Employee("Ирина", "Иванова", d2));
-            employeeList.Add(new Employee("Виктория", "Ильичева", d5));
         }
 
         /// <summary>
@@ -132,6 +110,37 @@ namespace EmployeeWPF
             departmentListBox.ItemsSource = departmentList;
             employeeListBox.ItemsSource = null;
             employeeListBox.ItemsSource = employeeList;
+        }
+
+        /// <summary>
+        /// Изменение подразделения сотрудника
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtChangeDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            //должен быть выбран сотрудник
+            if (employeeListBox.SelectedItem is Employee employee)
+            {
+                var editWin = new EditEmpDepartWindow
+                {
+                    Owner = this,
+                    SelectedEmployee = employee
+                };
+
+                editWin.Closed += EditWin_Closed;
+                editWin.Show();
+            }
+        }
+
+        /// <summary>
+        /// Событие происходящие по закрытию окна редактирования
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void EditWin_Closed(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }

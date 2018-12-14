@@ -79,9 +79,15 @@
                  Height="23" Margin="115,41,0,0" Grid.Row="2"
                  TextWrapping="Wrap" VerticalAlignment="Top" Width="272"/>
         <Label x:Name="lbEmployeeDepartment" Content="Подразделение" Grid.Column="1"
-               HorizontalAlignment="Left" Margin="10,72,0,0" Grid.Row="2" VerticalAlignment="Top"
+               HorizontalAlignment="Left" Margin="10,72,0,0" Grid.Row="2"
+               VerticalAlignment="Top"
                Width="100"/>
-        <TextBox x:Name="tbEmployeeDeprtment" Grid.Column="1" HorizontalAlignment="Left" Height="23"
-                 Margin="115,72,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="272" IsEnabled="False"/>
+        <TextBox x:Name="tbEmployeeDeprtment" Grid.Column="1"
+                 HorizontalAlignment="Left" Height="23"
+                 Margin="115,72,0,0" Grid.Row="2" TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="192" IsEnabled="False"/>
+        <Button x:Name="btChangeDepartment" Content="Изменить" Grid.Column="1"
+                HorizontalAlignment="Left" Margin="312,69,0,0"
+                Grid.Row="2" VerticalAlignment="Top" Width="75" Height="26" Click="BtChangeDepartment_Click"/>
     </Grid>
 </Window>

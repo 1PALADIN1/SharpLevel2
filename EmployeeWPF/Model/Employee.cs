@@ -35,6 +35,7 @@ namespace EmployeeWPF.Model
         public Department Department
         {
             get => department;
+            set => department = value;
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace EmployeeWPF.Model
         /// <returns>Полное имя сотрудника</returns>
         public override string ToString()
         {
-            return FullName;
+            return $"{FullName} - {Department.Name}";
         }
     }
 }
