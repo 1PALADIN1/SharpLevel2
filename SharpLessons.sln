@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLesson2", "SharpLesson
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLesson4", "SharpLesson4\SharpLesson4.csproj", "{E07EF73F-8553-408B-871B-707683BAC407}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeWPF", "EmployeeWPF\EmployeeWPF.csproj", "{4656AF50-D49D-4010-A7E9-DEDE351DFD40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E07EF73F-8553-408B-871B-707683BAC407}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E07EF73F-8553-408B-871B-707683BAC407}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E07EF73F-8553-408B-871B-707683BAC407}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4656AF50-D49D-4010-A7E9-DEDE351DFD40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4656AF50-D49D-4010-A7E9-DEDE351DFD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4656AF50-D49D-4010-A7E9-DEDE351DFD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4656AF50-D49D-4010-A7E9-DEDE351DFD40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
