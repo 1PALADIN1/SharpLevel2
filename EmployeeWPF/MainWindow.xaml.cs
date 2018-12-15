@@ -158,5 +158,21 @@ namespace EmployeeWPF
             newDepartWin.Closed += DefaultWin_Closed;
             newDepartWin.Show();
         }
+
+        /// <summary>
+        /// Обработка нажатия клавиши добавления нового солтрудника
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtAddEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            var newEmpWin = new AddNewEmployeeWindow
+            {
+                Owner = this
+            };
+
+            newEmpWin.Closed += DefaultWin_Closed;
+            newEmpWin.Show();
+        }
     }
 }

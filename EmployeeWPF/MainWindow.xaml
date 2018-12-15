@@ -74,22 +74,36 @@
         <TextBox x:Name="tbEmployeeFirstName" Grid.Column="1"
                  HorizontalAlignment="Left"
                  Height="23" Margin="115,10,0,0"
-                 Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top"
+                 Grid.Row="2" TextWrapping="Wrap"
+                 VerticalAlignment="Top"
                  Width="272"/>
-        <TextBox x:Name="tbEmployeeLastName" Grid.Column="1" HorizontalAlignment="Left"
+        <TextBox x:Name="tbEmployeeLastName" Grid.Column="1"
+                 HorizontalAlignment="Left"
                  Height="23" Margin="115,41,0,0" Grid.Row="2"
-                 TextWrapping="Wrap" VerticalAlignment="Top" Width="272"/>
-        <Label x:Name="lbEmployeeDepartment" Content="Подразделение" Grid.Column="1"
-               HorizontalAlignment="Left" Margin="10,72,0,0" Grid.Row="2"
+                 TextWrapping="Wrap" VerticalAlignment="Top"
+                 Width="272"/>
+        <Label x:Name="lbEmployeeDepartment"
+               Content="Подразделение" Grid.Column="1"
+               HorizontalAlignment="Left"
+               Margin="10,72,0,0" Grid.Row="2"
                VerticalAlignment="Top"
                Width="100" Height="26"/>
         <TextBox x:Name="tbEmployeeDeprtment" Grid.Column="1"
                  HorizontalAlignment="Left" Height="23"
-                 Margin="115,72,0,0" Grid.Row="2" TextWrapping="Wrap"
-                 VerticalAlignment="Top" Width="192" IsEnabled="False"/>
-        <Button x:Name="btChangeDepartment" Content="Изменить" Grid.Column="1"
+                 Margin="115,72,0,0" Grid.Row="2"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="192"
+                 IsEnabled="False"/>
+        <Button x:Name="btChangeDepartment"
+                Content="Изменить"
+                Grid.Column="1"
                 HorizontalAlignment="Left" Margin="312,69,0,0"
-                Grid.Row="2" VerticalAlignment="Top" Width="75" Height="26" Click="BtChangeDepartment_Click"/>
-        <Button x:Name="btAddEmployee" Content="+" VerticalAlignment="Stretch" Margin="364,0,0,0" FontSize="18" Grid.Column="1"/>
+                Grid.Row="2" VerticalAlignment="Top" Width="75"
+                Height="26" Click="BtChangeDepartment_Click"/>
+        <Button x:Name="btAddEmployee" Content="+"
+                VerticalAlignment="Stretch"
+                Margin="364,0,0,0" FontSize="18"
+                Grid.Column="1"
+                Click="BtAddEmployee_Click"/>
     </Grid>
 </Window>
