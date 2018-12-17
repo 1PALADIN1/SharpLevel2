@@ -47,8 +47,8 @@ namespace EmployeeWPF
             departmentList = DataController.departmentList;
 
             //привязка к представлению
-            employeeListBox.ItemsSource = employeeList;
-            departmentListBox.ItemsSource = departmentList;
+            employeeListBox.ItemsSource = DataController.employeeList;
+            departmentListBox.ItemsSource = DataController.departmentList;
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace EmployeeWPF
                 Owner = this
             };
 
-            newDepartWin.Closed += DefaultWin_Closed;
+            //newDepartWin.Closed += DefaultWin_Closed;
             newDepartWin.Show();
         }
 
@@ -143,8 +143,26 @@ namespace EmployeeWPF
                 Owner = this
             };
 
-            newEmpWin.Closed += DefaultWin_Closed;
+            //newEmpWin.Closed += DefaultWin_Closed;
             newEmpWin.Show();
+        }
+
+        /// <summary>
+        /// Удаление выбранной записи
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtDeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (departmentListBox.SelectedItem is Department department)
+            {
+                DataController.departmentList.Remove(department);
+            }
+
+            if (EmployeeListBox.SelectedItem is Employee employee)
+            {
+                DataController.employeeList.Remove(employee);
+            }
         }
     }
 }
