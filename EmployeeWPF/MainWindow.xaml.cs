@@ -128,19 +128,51 @@ namespace EmployeeWPF
                     SelectedEmployee = employee
                 };
 
-                editWin.Closed += EditWin_Closed;
+                editWin.Closed += DefaultWin_Closed;
                 editWin.Show();
             }
         }
 
         /// <summary>
-        /// Событие происходящие по закрытию окна редактирования
+        /// Стандартное событие, происходящие по закрытию окна
         /// </summary>
         /// <param name="sender">Объект, который вызвал событие</param>
         /// <param name="e">Параметры вызова</param>
-        private void EditWin_Closed(object sender, EventArgs e)
+        private void DefaultWin_Closed(object sender, EventArgs e)
         {
             RefreshData();
+        }
+
+        /// <summary>
+        /// Обработка нажатия клавиши добавления нового подразделения
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtAddDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            var newDepartWin = new AddNewDepartWindow
+            {
+                Owner = this
+            };
+
+            newDepartWin.Closed += DefaultWin_Closed;
+            newDepartWin.Show();
+        }
+
+        /// <summary>
+        /// Обработка нажатия клавиши добавления нового солтрудника
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtAddEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            var newEmpWin = new AddNewEmployeeWindow
+            {
+                Owner = this
+            };
+
+            newEmpWin.Closed += DefaultWin_Closed;
+            newEmpWin.Show();
         }
     }
 }
