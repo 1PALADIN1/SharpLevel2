@@ -52,34 +52,6 @@ namespace EmployeeWPF
         }
 
         /// <summary>
-        /// Обработчик событий переключения между подразделениями в списке
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void DepartmentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (departmentListBox.SelectedItem is Department department)
-            {
-                tbDepartmentName.Text = department.Name;
-            }
-        }
-
-        /// <summary>
-        /// Обработчик событий переключения между сотрудниками в списке
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void EmployeeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (employeeListBox.SelectedItem is Employee employee)
-            {
-                tbEmployeeFirstName.Text = employee.FirstName;
-                tbEmployeeLastName.Text = employee.LastName;
-                tbEmployeeDeprtment.Text = employee.Department.Name;
-            }
-        }
-
-        /// <summary>
         /// Сохранение отредактированных данных
         /// </summary>
         /// <param name="sender">Объект, который вызвал событие</param>
