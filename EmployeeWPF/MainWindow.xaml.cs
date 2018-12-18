@@ -22,9 +22,6 @@ namespace EmployeeWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Employee> employeeList;
-        private ObservableCollection<Department> departmentList;
-        
         public MainWindow()
         {
             InitializeComponent();
@@ -42,9 +39,6 @@ namespace EmployeeWPF
         private void InitData()
         {
             DataController.FillTestData();
-
-            employeeList = DataController.employeeList;
-            departmentList = DataController.departmentList;
 
             //привязка к представлению
             employeeListBox.ItemsSource = DataController.employeeList;
@@ -79,9 +73,9 @@ namespace EmployeeWPF
         {
             //списки
             departmentListBox.ItemsSource = null;
-            departmentListBox.ItemsSource = departmentList;
+            departmentListBox.ItemsSource = DataController.departmentList;
             employeeListBox.ItemsSource = null;
-            employeeListBox.ItemsSource = employeeList;
+            employeeListBox.ItemsSource = DataController.employeeList;
         }
 
         /// <summary>
