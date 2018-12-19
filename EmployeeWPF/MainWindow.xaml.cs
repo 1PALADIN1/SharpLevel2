@@ -22,9 +22,6 @@ namespace EmployeeWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Employee> employeeList;
-        private ObservableCollection<Department> departmentList;
-        
         public MainWindow()
         {
             InitializeComponent();
@@ -43,40 +40,9 @@ namespace EmployeeWPF
         {
             DataController.FillTestData();
 
-            employeeList = DataController.employeeList;
-            departmentList = DataController.departmentList;
-
             //привязка к представлению
-            employeeListBox.ItemsSource = employeeList;
-            departmentListBox.ItemsSource = departmentList;
-        }
-
-        /// <summary>
-        /// Обработчик событий переключения между подразделениями в списке
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void DepartmentListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (departmentListBox.SelectedItem is Department department)
-            {
-                tbDepartmentName.Text = department.Name;
-            }
-        }
-
-        /// <summary>
-        /// Обработчик событий переключения между сотрудниками в списке
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void EmployeeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (employeeListBox.SelectedItem is Employee employee)
-            {
-                tbEmployeeFirstName.Text = employee.FirstName;
-                tbEmployeeLastName.Text = employee.LastName;
-                tbEmployeeDeprtment.Text = employee.Department.Name;
-            }
+            employeeListBox.ItemsSource = DataController.employeeList;
+            departmentListBox.ItemsSource = DataController.departmentList;
         }
 
         /// <summary>
@@ -107,9 +73,9 @@ namespace EmployeeWPF
         {
             //списки
             departmentListBox.ItemsSource = null;
-            departmentListBox.ItemsSource = departmentList;
+            departmentListBox.ItemsSource = DataController.departmentList;
             employeeListBox.ItemsSource = null;
-            employeeListBox.ItemsSource = employeeList;
+            employeeListBox.ItemsSource = DataController.employeeList;
         }
 
         /// <summary>
@@ -128,19 +94,69 @@ namespace EmployeeWPF
                     SelectedEmployee = employee
                 };
 
-                editWin.Closed += EditWin_Closed;
+                editWin.Closed += DefaultWin_Closed;
                 editWin.Show();
             }
         }
 
         /// <summary>
-        /// Событие происходящие по закрытию окна редактирования
+        /// Стандартное событие, происходящие по закрытию окна
         /// </summary>
         /// <param name="sender">Объект, который вызвал событие</param>
         /// <param name="e">Параметры вызова</param>
-        private void EditWin_Closed(object sender, EventArgs e)
+        private void DefaultWin_Closed(object sender, EventArgs e)
         {
             RefreshData();
+        }
+
+        /// <summary>
+        /// Обработка нажатия клавиши добавления нового подразделения
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtAddDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            var newDepartWin = new AddNewDepartWindow
+            {
+                Owner = this
+            };
+
+            //newDepartWin.Closed += DefaultWin_Closed;
+            newDepartWin.Show();
+        }
+
+        /// <summary>
+        /// Обработка нажатия клавиши добавления нового солтрудника
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtAddEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            var newEmpWin = new AddNewEmployeeWindow
+            {
+                Owner = this
+            };
+
+            //newEmpWin.Closed += DefaultWin_Closed;
+            newEmpWin.Show();
+        }
+
+        /// <summary>
+        /// Удаление выбранной записи
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtDeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (departmentListBox.SelectedItem is Department department)
+            {
+                DataController.departmentList.Remove(department);
+            }
+
+            if (EmployeeListBox.SelectedItem is Employee employee)
+            {
+                DataController.employeeList.Remove(employee);
+            }
         }
     }
 }

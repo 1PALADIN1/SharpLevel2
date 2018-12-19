@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,13 @@ namespace EmployeeWPF.Model
     /// <summary>
     /// Класс сотрудников
     /// </summary>
-    class Employee
+    class Employee : INotifyPropertyChanged
     {
         private string firstName;
         private string lastName;
         private Department department;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public string FullName
         {
@@ -23,19 +26,31 @@ namespace EmployeeWPF.Model
         public string FirstName
         {
             get => firstName;
-            set => firstName = value;
+            set
+            {
+                firstName = value;
+                NotifyPropertyChanged(nameof(this.FirstName));
+            }
         }
 
         public string LastName
         {
             get => lastName;
-            set => lastName = value;
+            set
+            {
+                lastName = value;
+                NotifyPropertyChanged(nameof(this.LastName));
+            }
         }
 
         public Department Department
         {
             get => department;
-            set => department = value;
+            set
+            {
+                department = value;
+                NotifyPropertyChanged(nameof(this.Department));
+            }
         }
 
         /// <summary>
@@ -58,6 +73,15 @@ namespace EmployeeWPF.Model
         public override string ToString()
         {
             return $"{FullName} - {Department.Name}";
+        }
+
+        /// <summary>
+        /// Уведомление об изменении свойства объекта
+        /// </summary>
+        /// <param name="propName">Название свойства</param>
+        public void NotifyPropertyChanged(string propName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
     }
 }
