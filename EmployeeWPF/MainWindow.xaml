@@ -55,7 +55,13 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Grid.Row="1"
-                 Grid.Column="0"/>
+                 Grid.Column="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <ListBox x:Name="employeeListBox"
                  HorizontalAlignment="Stretch" 
                  VerticalAlignment="Stretch"

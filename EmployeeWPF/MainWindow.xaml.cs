@@ -93,20 +93,8 @@ namespace EmployeeWPF
                     Owner = this,
                     SelectedEmployee = employee
                 };
-
-                editWin.Closed += DefaultWin_Closed;
                 editWin.Show();
             }
-        }
-
-        /// <summary>
-        /// Стандартное событие, происходящие по закрытию окна
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void DefaultWin_Closed(object sender, EventArgs e)
-        {
-            RefreshData();
         }
 
         /// <summary>
@@ -120,8 +108,6 @@ namespace EmployeeWPF
             {
                 Owner = this
             };
-
-            //newDepartWin.Closed += DefaultWin_Closed;
             newDepartWin.Show();
         }
 
@@ -136,8 +122,6 @@ namespace EmployeeWPF
             {
                 Owner = this
             };
-
-            //newEmpWin.Closed += DefaultWin_Closed;
             newEmpWin.Show();
         }
 
