@@ -110,5 +110,16 @@ namespace EmployeeWPF
                 DataController.EmployeeList.Remove(employee);
             }
         }
+
+        /// <summary>
+        /// Закрытие главного окна и всего приложения
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void MainWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //закрываем подключение с базой
+            DataController.CloseDBConnection();
+        }
     }
 }
