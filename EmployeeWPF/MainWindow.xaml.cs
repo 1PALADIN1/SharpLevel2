@@ -121,5 +121,15 @@ namespace EmployeeWPF
             //закрываем подключение с базой
             DataController.CloseDBConnection();
         }
+
+        /// <summary>
+        /// Сохраняет все изменения в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtSaveData_Click(object sender, RoutedEventArgs e)
+        {
+            DataController.UpdateAllData();
+        }
     }
 }

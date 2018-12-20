@@ -168,5 +168,13 @@
                 VerticalAlignment="Top"
                 Height="20"
                 Width="75" Click="BtDeleteEmployee_Click"/>
+        <Button x:Name="btSaveData"
+                Content="Сохранить"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                Margin="456,115,0,0"
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                Width="75" Click="BtSaveData_Click"/>
     </Grid>
 </Window>

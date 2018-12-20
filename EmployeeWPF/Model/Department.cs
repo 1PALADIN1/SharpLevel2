@@ -10,11 +10,17 @@ namespace EmployeeWPF.Model
     /// <summary>
     /// Класс подразделений
     /// </summary>
-    class Department : INotifyPropertyChanged
+    class Department : INotifyPropertyChanged, IDB
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private int id;
         private string name;
+
+        public int Id
+        {
+            get => id;
+        }
 
         public string Name
         {
@@ -36,6 +42,17 @@ namespace EmployeeWPF.Model
         }
 
         /// <summary>
+        /// Инициализация нового подразделения
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="name">Название</param>
+        public Department(int id, string name)
+        {
+            this.id = id;
+            this.name = name;
+        }
+
+        /// <summary>
         /// Переопределение метода ToString()
         /// </summary>
         /// <returns>Название подразделения</returns>
@@ -51,6 +68,16 @@ namespace EmployeeWPF.Model
         public void NotifyPropertyChanged(string propName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+
+        /// <summary>
+        /// Генерация строки обновления данных
+        /// </summary>
+        /// <param name="tableName">Название таблицы</param>
+        /// <returns>Возвращает итоговую строку запроса</returns>
+        public string UpdateString(string tableName)
+        {
+            return $"UPDATE [dbo].[{tableName}] SET Name = '{name}' WHERE Id = {id};";
         }
     }
 }

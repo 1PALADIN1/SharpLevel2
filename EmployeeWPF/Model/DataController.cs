@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace EmployeeWPF.Model
 {
@@ -19,6 +20,8 @@ namespace EmployeeWPF.Model
         private static SqlConnection connection;
         private static bool needFillData = false;
         private static SqlCommand command;
+        private static string selectEmployee = @"SELECT * FROM [dbo].[Employee]";
+        private static string selectDepartment = @"SELECT * FROM [dbo].[Department]";
 
         public static ObservableCollection<Employee> EmployeeList
         {
@@ -49,13 +52,14 @@ namespace EmployeeWPF.Model
         {
             employeeList = new ObservableCollection<Employee>();
             departmentList = new ObservableCollection<Department>();
-            
+
             try
             {
                 InitDBConnection();
                 connection.Open();
                 GenerateDBSchema();
                 FillTestData();
+                FillLists();
             }
             catch (Exception e)
             {
@@ -91,8 +95,6 @@ namespace EmployeeWPF.Model
                         [Name] VARCHAR (50) NOT NULL,
                         PRIMARY KEY CLUSTERED ([Id] ASC)
                     );";
-            string selectEmployee = @"SELECT * FROM [dbo].[Employee]";
-            string selectDepartment = @"SELECT * FROM [dbo].[Department]";
 
             try
             {
@@ -128,26 +130,6 @@ namespace EmployeeWPF.Model
         /// </summary>
         private static void FillTestData()
         {
-            Department d1 = new Department("Главрыба");
-            Department d2 = new Department("Look Oil");
-            Department d3 = new Department("PinApple");
-            Department d4 = new Department("Дворик в деревне");
-            Department d5 = new Department("Man & Woman");
-
-            departmentList.Add(d1);
-            departmentList.Add(d2);
-            departmentList.Add(d3);
-            departmentList.Add(d4);
-            departmentList.Add(d5);
-
-            employeeList.Add(new Employee("Иван", "Каретников", d1));
-            employeeList.Add(new Employee("Анатолий", "Жлобин", d2));
-            employeeList.Add(new Employee("Евгения", "Зайцева", d4));
-            employeeList.Add(new Employee("Илья", "Татаров", d3));
-            employeeList.Add(new Employee("Наталья", "Ильина", d1));
-            employeeList.Add(new Employee("Ирина", "Иванова", d2));
-            employeeList.Add(new Employee("Виктория", "Ильичева", d5));
-
             //заполняем таблицы тестовыми данными
             if (needFillData)
             {
@@ -195,6 +177,56 @@ namespace EmployeeWPF.Model
         }
 
         /// <summary>
+        /// Наполение списков сотрудников и подразделений данными из БД
+        /// </summary>
+        private static void FillLists()
+        {
+            SqlDataReader reader;
+
+            //наполняем подразделения
+            command = new SqlCommand(selectDepartment, connection);
+            reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while(reader.Read())
+                {
+                    departmentList.Add(new Department(reader.GetInt32(reader.GetOrdinal("Id")),
+                                                      reader.GetString(reader.GetOrdinal("Name")) ));
+                }
+            }
+            reader.Close();
+
+            //наполняем сотрудников
+            command = new SqlCommand(selectEmployee, connection);
+            reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    employeeList.Add(new Employee(reader.GetInt32(reader.GetOrdinal("Id")),
+                                                  reader.GetString(reader.GetOrdinal("FirstName")),
+                                                  reader.GetString(reader.GetOrdinal("LastName")),
+                                                  GetDepartmentById(reader.GetInt32(reader.GetOrdinal("DepartId"))) ));
+                }
+            }
+            reader.Close();
+        }
+
+        /// <summary>
+        /// Получение подразделения по идентификатору
+        /// </summary>
+        /// <returns></returns>
+        private static Department GetDepartmentById(int id)
+        {
+            foreach (var item in departmentList)
+            {
+                if (item.Id == id)
+                    return item;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Закрытие соединения
         /// </summary>
         public static void CloseDBConnection()
@@ -202,6 +234,39 @@ namespace EmployeeWPF.Model
             if (connection != null)
             {
                 connection.Close();
+            }
+        }
+
+        /// <summary>
+        /// Обновление записи
+        /// </summary>
+        /// <typeparam name="T">Тип объекта</typeparam>
+        /// <param name="updateObject">Объект</param>
+        public static void UpdateRecord<T>(T updateObject) where T : IDB
+        {
+            string tableName = String.Empty;
+            if (updateObject is Employee) tableName = "Employee";
+            if (updateObject is Department) tableName = "Department";
+
+            if (String.IsNullOrEmpty(tableName)) return;
+
+            command = new SqlCommand(updateObject.UpdateString(tableName), connection);
+            command.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Обновление всех данных
+        /// </summary>
+        public static void UpdateAllData()
+        {
+            foreach (var item in employeeList)
+            {
+                UpdateRecord(item);
+            }
+
+            foreach (var item in departmentList)
+            {
+                UpdateRecord(item);
             }
         }
     }
