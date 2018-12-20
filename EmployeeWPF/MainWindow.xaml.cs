@@ -33,11 +33,9 @@ namespace EmployeeWPF
         /// </summary>
         private void InitData()
         {
-            DataController.FillTestData();
-
             //привязка к представлению
-            departmentListBox.ItemsSource = DataController.departmentList;
-            dgEmployee.ItemsSource = DataController.employeeList;
+            departmentListBox.ItemsSource = DataController.DepartmentList;
+            dgEmployee.ItemsSource = DataController.EmployeeList;
         }
 
         /// <summary>
@@ -96,7 +94,7 @@ namespace EmployeeWPF
         {
             if (departmentListBox.SelectedItem is Department department)
             {
-                DataController.departmentList.Remove(department);
+                DataController.DepartmentList.Remove(department);
             }
         }
 
@@ -109,7 +107,7 @@ namespace EmployeeWPF
         {
             if (dgEmployee.SelectedItem is Employee employee)
             {
-                DataController.employeeList.Remove(employee);
+                DataController.EmployeeList.Remove(employee);
             }
         }
     }

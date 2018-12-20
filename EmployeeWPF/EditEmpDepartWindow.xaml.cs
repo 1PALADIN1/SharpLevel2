@@ -40,7 +40,7 @@ namespace EmployeeWPF
         /// </summary>
         private void InitData()
         {
-            departmentListBox.ItemsSource = DataController.departmentList;
+            departmentListBox.ItemsSource = DataController.DepartmentList;
         }
 
         /// <summary>

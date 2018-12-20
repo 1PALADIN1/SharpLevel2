@@ -12,13 +12,45 @@ namespace EmployeeWPF.Model
     /// </summary>
     class DataController
     {
-        public static ObservableCollection<Employee> employeeList = new ObservableCollection<Employee>();
-        public static ObservableCollection<Department> departmentList = new ObservableCollection<Department>();
+        private static ObservableCollection<Employee> employeeList;
+        private static ObservableCollection<Department> departmentList;
+
+        public static ObservableCollection<Employee> EmployeeList
+        {
+            get
+            {
+                if (employeeList == null)
+                    InitData();
+                return employeeList;
+            }
+        }
+
+        public static ObservableCollection<Department> DepartmentList
+        {
+            get
+            {
+                if (departmentList == null)
+                    InitData();
+                return departmentList;
+            }
+        }
+
+        private DataController() { }
+
+        /// <summary>
+        /// Инициализация данных
+        /// </summary>
+        private static void InitData()
+        {
+            employeeList = new ObservableCollection<Employee>();
+            departmentList = new ObservableCollection<Department>();
+            FillTestData();
+        }
 
         /// <summary>
         /// Заполнение списков тестовыми данными (временная функция)
         /// </summary>
-        public static void FillTestData()
+        private static void FillTestData()
         {
             Department d1 = new Department("Главрыба");
             Department d2 = new Department("Look Oil");

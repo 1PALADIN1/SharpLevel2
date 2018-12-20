@@ -34,7 +34,7 @@ namespace EmployeeWPF
         /// </summary>
         private void InitData()
         {
-            deprtmentListBox.ItemsSource = DataController.departmentList;
+            deprtmentListBox.ItemsSource = DataController.DepartmentList;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace EmployeeWPF
                 return;
             }
 
-            DataController.employeeList.Add(new Employee(firstName, lastName, department));
+            DataController.EmployeeList.Add(new Employee(firstName, lastName, department));
 
             Close();
         }
