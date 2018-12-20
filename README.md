@@ -8,6 +8,4 @@
   - Перемещение вверх/вниз - стрелочки
   - Стрельба - клавиша "A"
 
-![alt text](https://yadi.sk/i/QvDR90Qdb_-SgQ)
-
-Остальные репозитории 
+![Screenshot](projscreens/spaceshooter.png)
