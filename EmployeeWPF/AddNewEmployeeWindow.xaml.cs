@@ -46,7 +46,7 @@ namespace EmployeeWPF
         {
             var firstName = tbFirstName.Text;
             var lastName = tbLastName.Text;
-            var department = deprtmentListBox.SelectedItem as Department;
+            Department department = deprtmentListBox.SelectedItem as Department;
 
             if (String.IsNullOrEmpty(firstName) || String.IsNullOrEmpty(lastName))
             {

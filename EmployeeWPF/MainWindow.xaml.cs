@@ -28,11 +28,6 @@ namespace EmployeeWPF
             InitData();
         }
 
-        public ListBox EmployeeListBox
-        {
-            get => employeeListBox;
-        }
-
         /// <summary>
         /// инициализация списков
         /// </summary>
@@ -43,39 +38,6 @@ namespace EmployeeWPF
             //привязка к представлению
             employeeListBox.ItemsSource = DataController.employeeList;
             departmentListBox.ItemsSource = DataController.departmentList;
-        }
-
-        /// <summary>
-        /// Сохранение отредактированных данных
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void BtSave_Click(object sender, RoutedEventArgs e)
-        {
-            if (departmentListBox.SelectedItem is Department department)
-            {
-                department.Name = tbDepartmentName.Text;
-            }
-
-            if (employeeListBox.SelectedItem is Employee employee)
-            {
-                employee.FirstName = tbEmployeeFirstName.Text;
-                employee.LastName = tbEmployeeLastName.Text;
-            }
-
-            RefreshData();
-        }
-
-        /// <summary>
-        /// Обновление данных на экране
-        /// </summary>
-        private void RefreshData()
-        {
-            //списки
-            departmentListBox.ItemsSource = null;
-            departmentListBox.ItemsSource = DataController.departmentList;
-            employeeListBox.ItemsSource = null;
-            employeeListBox.ItemsSource = DataController.employeeList;
         }
 
         /// <summary>
@@ -137,7 +99,7 @@ namespace EmployeeWPF
                 DataController.departmentList.Remove(department);
             }
 
-            if (EmployeeListBox.SelectedItem is Employee employee)
+            if (employeeListBox.SelectedItem is Employee employee)
             {
                 DataController.employeeList.Remove(employee);
             }
