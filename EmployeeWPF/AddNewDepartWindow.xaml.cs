@@ -35,7 +35,7 @@ namespace EmployeeWPF
             if (String.IsNullOrEmpty(tbDepartName.Text)) MessageBox.Show("Заполните название подразделения!");
             else
             {
-                DataController.DepartmentList.Add(new Department(tbDepartName.Text));
+                DataController.InsertRecord(new Department(tbDepartName.Text));
                 Close();
             }
         }

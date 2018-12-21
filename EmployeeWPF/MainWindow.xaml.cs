@@ -94,7 +94,7 @@ namespace EmployeeWPF
         {
             if (departmentListBox.SelectedItem is Department department)
             {
-                DataController.DepartmentList.Remove(department);
+                DataController.DeleteRecord(department);
             }
         }
 
@@ -107,7 +107,7 @@ namespace EmployeeWPF
         {
             if (dgEmployee.SelectedItem is Employee employee)
             {
-                DataController.EmployeeList.Remove(employee);
+                DataController.DeleteRecord(employee);
             }
         }
 

@@ -242,7 +242,7 @@ namespace EmployeeWPF.Model
         /// </summary>
         /// <typeparam name="T">Тип объекта</typeparam>
         /// <param name="updateObject">Объект</param>
-        public static void UpdateRecord<T>(T updateObject) where T : IDB
+        public static void UpdateRecord(IDB updateObject)
         {
             string tableName = String.Empty;
             if (updateObject is Employee) tableName = "Employee";
@@ -268,6 +268,54 @@ namespace EmployeeWPF.Model
             {
                 UpdateRecord(item);
             }
+        }
+
+        /// <summary>
+        /// Вставка записи
+        /// </summary>
+        public static void InsertRecord(IDB insertObject)
+        {
+            string tableName = String.Empty;
+            if (insertObject is Employee employee)
+            {
+                employeeList.Add(employee);
+                tableName = "Employee";
+            }
+            if (insertObject is Department department)
+            {
+                departmentList.Add(department);
+                tableName = "Department";
+            }
+
+            if (String.IsNullOrEmpty(tableName)) return;
+
+            command = new SqlCommand(insertObject.InsertString(tableName), connection);
+            command.ExecuteNonQuery();
+
+            //временное решение, чтобы цеплялись id к новым записям
+            departmentList.Clear();
+            employeeList.Clear();
+            FillLists();
+        }
+
+        public static void DeleteRecord(IDB deleteObject)
+        {
+            string tableName = String.Empty;
+            if (deleteObject is Employee employee)
+            {
+                employeeList.Remove(employee);
+                tableName = "Employee";
+            }
+            if (deleteObject is Department department)
+            {
+                departmentList.Remove(department);
+                tableName = "Department";
+            }
+
+            if (String.IsNullOrEmpty(tableName)) return;
+
+            command = new SqlCommand(deleteObject.DeleteString(tableName), connection);
+            command.ExecuteNonQuery();
         }
     }
 }

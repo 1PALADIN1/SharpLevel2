@@ -109,5 +109,25 @@ namespace EmployeeWPF.Model
         {
             return $"UPDATE [dbo].[{tableName}] SET FirstName = '{FirstName}', LastName = '{LastName}', DepartId = {Department.Id} WHERE Id = {id};";
         }
+
+        /// <summary>
+        /// Генерация строки вставки данных
+        /// </summary>
+        /// <param name="tableName">Название таблицы</param>
+        /// <returns>Возвращает итоговую строку запроса</returns>
+        public string InsertString(string tableName)
+        {
+            return $"INSERT INTO [dbo].[{tableName}] (FirstName, LastName, DepartId) VALUES ('{FirstName}', '{LastName}', {Department.Id});";
+        }
+
+        /// <summary>
+        /// Генерация строки удаления данных
+        /// </summary>
+        /// <param name="tableName">Название таблицы</param>
+        /// <returns>Возвращает итоговую строку запроса</returns>
+        public string DeleteString(string tableName)
+        {
+            return $"DELETE FROM  [dbo].[{tableName}] WHERE Id = {id};";
+        }
     }
 }

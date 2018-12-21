@@ -60,7 +60,7 @@ namespace EmployeeWPF
                 return;
             }
 
-            DataController.EmployeeList.Add(new Employee(firstName, lastName, department));
+            DataController.InsertRecord(new Employee(firstName, lastName, department));
 
             Close();
         }

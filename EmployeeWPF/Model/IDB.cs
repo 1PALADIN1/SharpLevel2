@@ -9,5 +9,7 @@ namespace EmployeeWPF.Model
     interface IDB
     {
         string UpdateString(string tableName);
+        string InsertString(string tableName);
+        string DeleteString(string tableName);
     }
 }
