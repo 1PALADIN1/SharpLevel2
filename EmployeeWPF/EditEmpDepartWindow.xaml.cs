@@ -53,6 +53,7 @@ namespace EmployeeWPF
             if (departmentListBox.SelectedItem is Department department)
             {
                 SelectedEmployee.Department = department;
+                DataController.UpdateRecord(SelectedEmployee);
                 Close();
             }
         }
