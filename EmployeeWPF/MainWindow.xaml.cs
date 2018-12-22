@@ -28,54 +28,14 @@ namespace EmployeeWPF
             InitData();
         }
 
-        public ListBox EmployeeListBox
-        {
-            get => employeeListBox;
-        }
-
         /// <summary>
         /// инициализация списков
         /// </summary>
         private void InitData()
         {
-            DataController.FillTestData();
-
             //привязка к представлению
-            employeeListBox.ItemsSource = DataController.employeeList;
-            departmentListBox.ItemsSource = DataController.departmentList;
-        }
-
-        /// <summary>
-        /// Сохранение отредактированных данных
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void BtSave_Click(object sender, RoutedEventArgs e)
-        {
-            if (departmentListBox.SelectedItem is Department department)
-            {
-                department.Name = tbDepartmentName.Text;
-            }
-
-            if (employeeListBox.SelectedItem is Employee employee)
-            {
-                employee.FirstName = tbEmployeeFirstName.Text;
-                employee.LastName = tbEmployeeLastName.Text;
-            }
-
-            RefreshData();
-        }
-
-        /// <summary>
-        /// Обновление данных на экране
-        /// </summary>
-        private void RefreshData()
-        {
-            //списки
-            departmentListBox.ItemsSource = null;
-            departmentListBox.ItemsSource = DataController.departmentList;
-            employeeListBox.ItemsSource = null;
-            employeeListBox.ItemsSource = DataController.employeeList;
+            departmentListBox.ItemsSource = DataController.DepartmentList;
+            dgEmployee.ItemsSource = DataController.EmployeeList;
         }
 
         /// <summary>
@@ -86,27 +46,15 @@ namespace EmployeeWPF
         private void BtChangeDepartment_Click(object sender, RoutedEventArgs e)
         {
             //должен быть выбран сотрудник
-            if (employeeListBox.SelectedItem is Employee employee)
+            if (dgEmployee.SelectedItem is Employee employee)
             {
                 var editWin = new EditEmpDepartWindow
                 {
                     Owner = this,
                     SelectedEmployee = employee
                 };
-
-                editWin.Closed += DefaultWin_Closed;
                 editWin.Show();
             }
-        }
-
-        /// <summary>
-        /// Стандартное событие, происходящие по закрытию окна
-        /// </summary>
-        /// <param name="sender">Объект, который вызвал событие</param>
-        /// <param name="e">Параметры вызова</param>
-        private void DefaultWin_Closed(object sender, EventArgs e)
-        {
-            RefreshData();
         }
 
         /// <summary>
@@ -120,8 +68,6 @@ namespace EmployeeWPF
             {
                 Owner = this
             };
-
-            //newDepartWin.Closed += DefaultWin_Closed;
             newDepartWin.Show();
         }
 
@@ -136,27 +82,54 @@ namespace EmployeeWPF
             {
                 Owner = this
             };
-
-            //newEmpWin.Closed += DefaultWin_Closed;
             newEmpWin.Show();
         }
 
         /// <summary>
-        /// Удаление выбранной записи
+        /// Удаление выбранной записи подразделения
         /// </summary>
         /// <param name="sender">Объект, который вызвал событие</param>
         /// <param name="e">Параметры вызова</param>
-        private void BtDeleteItem_Click(object sender, RoutedEventArgs e)
+        private void BtDeleteDepart_Click(object sender, RoutedEventArgs e)
         {
             if (departmentListBox.SelectedItem is Department department)
             {
-                DataController.departmentList.Remove(department);
+                DataController.DeleteRecord(department);
             }
+        }
 
-            if (EmployeeListBox.SelectedItem is Employee employee)
+        /// <summary>
+        /// Удаление выбранной записи сотрудника
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void BtDeleteEmployee_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgEmployee.SelectedItem is Employee employee)
             {
-                DataController.employeeList.Remove(employee);
+                DataController.DeleteRecord(employee);
             }
+        }
+
+        /// <summary>
+        /// Закрытие главного окна и всего приложения
+        /// </summary>
+        /// <param name="sender">Объект, который вызвал событие</param>
+        /// <param name="e">Параметры вызова</param>
+        private void MainWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //закрываем подключение с базой
+            DataController.CloseDBConnection();
+        }
+
+        /// <summary>
+        /// Сохраняет все изменения в БД
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtSaveData_Click(object sender, RoutedEventArgs e)
+        {
+            DataController.UpdateAllData();
         }
     }
 }

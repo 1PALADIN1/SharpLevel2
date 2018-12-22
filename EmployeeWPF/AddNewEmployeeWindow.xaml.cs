@@ -34,7 +34,7 @@ namespace EmployeeWPF
         /// </summary>
         private void InitData()
         {
-            deprtmentListBox.ItemsSource = DataController.departmentList;
+            deprtmentListBox.ItemsSource = DataController.DepartmentList;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace EmployeeWPF
         {
             var firstName = tbFirstName.Text;
             var lastName = tbLastName.Text;
-            var department = deprtmentListBox.SelectedItem as Department;
+            Department department = deprtmentListBox.SelectedItem as Department;
 
             if (String.IsNullOrEmpty(firstName) || String.IsNullOrEmpty(lastName))
             {
@@ -60,7 +60,7 @@ namespace EmployeeWPF
                 return;
             }
 
-            DataController.employeeList.Add(new Employee(firstName, lastName, department));
+            DataController.InsertRecord(new Employee(firstName, lastName, department));
 
             Close();
         }

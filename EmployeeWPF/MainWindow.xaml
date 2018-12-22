@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmployeeWPF"
         mc:Ignorable="d"
-        Title="Department - Employee" Height="640" Width="800" ResizeMode="CanMinimize">
+        Title="Department - Employee" Height="640" Width="800"
+        Closing="MainWin_Closing"
+        ResizeMode="CanMinimize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="29*"/>
@@ -13,60 +15,59 @@
             <RowDefinition Height="145*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="253*"/>
+            <ColumnDefinition Width="541*"/>
         </Grid.ColumnDefinitions>
         <Label x:Name="lbDepartment"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Stretch"
                Grid.Column="0"
-               Grid.Row="0" Margin="0,0,33,0"
+               Grid.Row="0" Margin="0,0,5,0"
                Content="Подразделение"/>
         <Button x:Name="btAddDepartment"
-                Content="+"
-                VerticalAlignment="Stretch"
-                Margin="364,0,0,0"
-                FontSize="18"
-                Click="BtAddDepartment_Click"/>
+                Content="Добавить"
+                Margin="10,115,0,0"
+                Click="BtAddDepartment_Click"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Height="20"
+                Width="75"
+                Grid.Column="0"
+                Grid.Row="2"/>
         <Label Content="Сотрудники"
-               HorizontalAlignment="Stretch"
+               HorizontalAlignment="Right"
                VerticalAlignment="Stretch"
                Grid.Column="1"
-               Grid.Row="0" Margin="0,0,33,0"/>
+               Grid.Row="0" Width="526" Margin="0,0,10,0"/>
         <TextBox x:Name="tbDepartmentName"
                  Text="{Binding ElementName=departmentListBox,
                         Path=SelectedItem.Name,
                         UpdateSourceTrigger=PropertyChanged}"
                  HorizontalAlignment="Left"
                  Height="23"
-                 Margin="115,10,0,0"
+                 Margin="90,10,0,0"
                  Grid.Row="2"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
-                 Width="271"/>
+                 Width="153"/>
         <Label x:Name="lbDepartmentName"
                Content="Название"
                HorizontalAlignment="Left"
                Margin="10,10,0,0"
                Grid.Row="2"
                VerticalAlignment="Top"
-               Width="100" Height="26"/>
+               Width="75" Height="26"/>
         <ListBox x:Name="departmentListBox"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Grid.Row="1"
-                 Grid.Column="0"/>
-        <ListBox x:Name="employeeListBox"
-                 HorizontalAlignment="Stretch" 
-                 VerticalAlignment="Stretch"
-                 Grid.Column="1"
-                 Grid.Row="1"/>
-        <Button x:Name="btSave"
-                Content="Сохранить"
-                HorizontalAlignment="Left"
-                Margin="10,115,0,0" Grid.Row="2"
-                VerticalAlignment="Top" Width="75"
-                Click="BtSave_Click" Height="20"/>
+                 Grid.Column="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Label x:Name="lbEmployeeFirstName" Content="Имя" Grid.Column="1"
                HorizontalAlignment="Left"
                Margin="10,10,0,0"
@@ -81,7 +82,7 @@
                VerticalAlignment="Top"
                Width="100" Height="26"/>
         <TextBox x:Name="tbEmployeeFirstName"
-                 Text="{Binding ElementName=employeeListBox,
+                 Text="{Binding ElementName=dgEmployee,
                         Path=SelectedItem.FirstName,
                         UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
@@ -89,9 +90,9 @@
                  Height="23" Margin="115,10,0,0"
                  Grid.Row="2" TextWrapping="Wrap"
                  VerticalAlignment="Top"
-                 Width="272"/>
+                 Width="416"/>
         <TextBox x:Name="tbEmployeeLastName"
-                 Text="{Binding ElementName=employeeListBox,
+                 Text="{Binding ElementName=dgEmployee,
                         Path=SelectedItem.LastName,
                         UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
@@ -100,7 +101,7 @@
                  Grid.Row="2"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
-                 Width="272"/>
+                 Width="416"/>
         <Label x:Name="lbEmployeeDepartment"
                Content="Подразделение" Grid.Column="1"
                HorizontalAlignment="Left"
@@ -108,7 +109,7 @@
                VerticalAlignment="Top"
                Width="100" Height="26"/>
         <TextBox x:Name="tbEmployeeDeprtment"
-                 Text="{Binding ElementName=employeeListBox,
+                 Text="{Binding ElementName=dgEmployee,
                         Path=SelectedItem.Department.Name}"
                  Grid.Column="1"
                  HorizontalAlignment="Left"
@@ -117,25 +118,63 @@
                  Grid.Row="2"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
-                 Width="192"
+                 Width="336"
                  IsEnabled="False"/>
         <Button x:Name="btChangeDepartment"
                 Content="Изменить"
                 Grid.Column="1"
-                HorizontalAlignment="Left" Margin="312,69,0,0"
+                HorizontalAlignment="Left" Margin="456,72,0,0"
                 Grid.Row="2" VerticalAlignment="Top" Width="75"
-                Height="26" Click="BtChangeDepartment_Click"/>
-        <Button x:Name="btAddEmployee" Content="+"
-                VerticalAlignment="Stretch"
-                Margin="364,0,0,0" FontSize="18"
+                Height="23" Click="BtChangeDepartment_Click"/>
+        <Button x:Name="btAddEmployee"
+                Content="Добавить"
+                Margin="10,115,0,0"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Grid.Row="2"
                 Grid.Column="1"
+                Width="75"
+                Height="20"
                 Click="BtAddEmployee_Click"/>
-        <Button x:Name="btDeleteItem"
+        <Button x:Name="btDeleteDepart"
                 Content="Удалить"
                 HorizontalAlignment="Left"
                 Margin="90,115,0,0"
                 Grid.Row="2"
                 VerticalAlignment="Top"
-                Width="75" Click="BtDeleteItem_Click"/>
+                Width="75" Click="BtDeleteDepart_Click" Height="20"/>
+        <DataGrid x:Name="dgEmployee"
+                  Grid.Column="1"
+                  HorizontalAlignment="Stretch"
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  VerticalAlignment="Stretch">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Фамилия" Width="120"
+                                    Binding="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Имя" Width="120"
+                                    Binding="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Подразделение" Width="*"
+                                    Binding="{Binding Department.Name, UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="btDeleteEmployee"
+                Content="Удалить"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                Margin="90,115,0,0" Grid.Row="2"
+                VerticalAlignment="Top"
+                Height="20"
+                Width="75" Click="BtDeleteEmployee_Click"/>
+        <Button x:Name="btSaveData"
+                Content="Сохранить"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                Margin="456,115,0,0"
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                Width="75" Click="BtSaveData_Click"/>
     </Grid>
 </Window>

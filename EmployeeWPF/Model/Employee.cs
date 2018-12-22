@@ -10,8 +10,9 @@ namespace EmployeeWPF.Model
     /// <summary>
     /// Класс сотрудников
     /// </summary>
-    class Employee : INotifyPropertyChanged
+    class Employee : INotifyPropertyChanged, IDB
     {
+        private int id;
         private string firstName;
         private string lastName;
         private Department department;
@@ -67,6 +68,21 @@ namespace EmployeeWPF.Model
         }
 
         /// <summary>
+        /// Инициализация нового сотрудника
+        /// </summary>
+        /// <param name="id">Идентификатор</param>
+        /// <param name="firstName">Имя</param>
+        /// <param name="lastName">Фамилия</param>
+        /// <param name="department">Подразделение</param>
+        public Employee(int id, string firstName, string lastName, Department department)
+        {
+            this.id = id;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.department = department;
+        }
+
+        /// <summary>
         /// Переопределение метода ToString()
         /// </summary>
         /// <returns>Полное имя сотрудника</returns>
@@ -82,6 +98,36 @@ namespace EmployeeWPF.Model
         public void NotifyPropertyChanged(string propName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+
+        /// <summary>
+        /// Генерация строки обновления данных
+        /// </summary>
+        /// <param name="tableName">Название таблицы</param>
+        /// <returns>Возвращает итоговую строку запроса</returns>
+        public string UpdateString(string tableName)
+        {
+            return $"UPDATE [dbo].[{tableName}] SET FirstName = '{FirstName}', LastName = '{LastName}', DepartId = {Department.Id} WHERE Id = {id};";
+        }
+
+        /// <summary>
+        /// Генерация строки вставки данных
+        /// </summary>
+        /// <param name="tableName">Название таблицы</param>
+        /// <returns>Возвращает итоговую строку запроса</returns>
+        public string InsertString(string tableName)
+        {
+            return $"INSERT INTO [dbo].[{tableName}] (FirstName, LastName, DepartId) VALUES ('{FirstName}', '{LastName}', {Department.Id});";
+        }
+
+        /// <summary>
+        /// Генерация строки удаления данных
+        /// </summary>
+        /// <param name="tableName">Название таблицы</param>
+        /// <returns>Возвращает итоговую строку запроса</returns>
+        public string DeleteString(string tableName)
+        {
+            return $"DELETE FROM  [dbo].[{tableName}] WHERE Id = {id};";
         }
     }
 }

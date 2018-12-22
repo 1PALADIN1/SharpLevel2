@@ -21,7 +21,6 @@ namespace EmployeeWPF
     /// </summary>
     public partial class EditEmpDepartWindow : Window
     {
-        private ObservableCollection<Department> departmentList;
         private Employee selectedEmployee;
 
         internal Employee SelectedEmployee
@@ -41,8 +40,7 @@ namespace EmployeeWPF
         /// </summary>
         private void InitData()
         {
-            departmentList = DataController.departmentList;
-            departmentListBox.ItemsSource = departmentList;
+            departmentListBox.ItemsSource = DataController.DepartmentList;
         }
 
         /// <summary>
@@ -55,7 +53,8 @@ namespace EmployeeWPF
             if (departmentListBox.SelectedItem is Department department)
             {
                 SelectedEmployee.Department = department;
-                this.Close();
+                DataController.UpdateRecord(SelectedEmployee);
+                Close();
             }
         }
     }
