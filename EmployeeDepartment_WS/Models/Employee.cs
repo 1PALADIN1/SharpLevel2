@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeWPF.Model
+namespace EmployeeDepartment_WS.Models
 {
     /// <summary>
     /// Класс сотрудников
