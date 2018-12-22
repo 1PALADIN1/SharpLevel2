@@ -10,14 +10,13 @@ namespace EmployeeDepartment_WS.Models
     /// <summary>
     /// Класс сотрудников
     /// </summary>
-    public class Employee : INotifyPropertyChanged, IDB
+    [Serializable]
+    public class Employee : IDB
     {
         private int id;
         private string firstName;
         private string lastName;
         private Department department;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public string FullName
         {
@@ -30,7 +29,6 @@ namespace EmployeeDepartment_WS.Models
             set
             {
                 firstName = value;
-                NotifyPropertyChanged(nameof(this.FirstName));
             }
         }
 
@@ -40,7 +38,6 @@ namespace EmployeeDepartment_WS.Models
             set
             {
                 lastName = value;
-                NotifyPropertyChanged(nameof(this.LastName));
             }
         }
 
@@ -50,7 +47,6 @@ namespace EmployeeDepartment_WS.Models
             set
             {
                 department = value;
-                NotifyPropertyChanged(nameof(this.Department));
             }
         }
 
@@ -89,15 +85,6 @@ namespace EmployeeDepartment_WS.Models
         public override string ToString()
         {
             return $"{FullName} - {Department.Name}";
-        }
-
-        /// <summary>
-        /// Уведомление об изменении свойства объекта
-        /// </summary>
-        /// <param name="propName">Название свойства</param>
-        public void NotifyPropertyChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         /// <summary>

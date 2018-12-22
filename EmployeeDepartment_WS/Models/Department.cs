@@ -10,10 +10,9 @@ namespace EmployeeDepartment_WS.Models
     /// <summary>
     /// Класс подразделений
     /// </summary>
-    public class Department : INotifyPropertyChanged, IDB
+    [Serializable]
+    public class Department : IDB
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private int id;
         private string name;
 
@@ -28,7 +27,6 @@ namespace EmployeeDepartment_WS.Models
             set
             {
                 name = value;
-                NotifyPropertyChanged(nameof(this.Name));
             }
         }
 
@@ -59,15 +57,6 @@ namespace EmployeeDepartment_WS.Models
         public override string ToString()
         {
             return Name;
-        }
-
-        /// <summary>
-        /// Уведомление об изменении свойства объекта
-        /// </summary>
-        /// <param name="propName">Название свойства</param>
-        public void NotifyPropertyChanged(string propName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         /// <summary>

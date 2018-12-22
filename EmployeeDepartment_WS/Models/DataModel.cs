@@ -10,15 +10,15 @@ namespace EmployeeDepartment_WS.Models
 {
     public class DataModel
     {
-        private static ObservableCollection<Employee> employeeList;
-        private static ObservableCollection<Department> departmentList;
+        private static List<Employee> employeeList;
+        private static List<Department> departmentList;
         private static SqlConnection connection;
         private static bool needFillData = false;
         private static SqlCommand command;
         private static string selectEmployee = @"SELECT * FROM [dbo].[Employee]";
         private static string selectDepartment = @"SELECT * FROM [dbo].[Department]";
 
-        public static ObservableCollection<Employee> EmployeeList
+        public static List<Employee> EmployeeList
         {
             get
             {
@@ -28,7 +28,7 @@ namespace EmployeeDepartment_WS.Models
             }
         }
 
-        public static ObservableCollection<Department> DepartmentList
+        public static List<Department> DepartmentList
         {
             get
             {
@@ -45,8 +45,8 @@ namespace EmployeeDepartment_WS.Models
         /// </summary>
         private static void InitData()
         {
-            employeeList = new ObservableCollection<Employee>();
-            departmentList = new ObservableCollection<Department>();
+            employeeList = new List<Employee>();
+            departmentList = new List<Department>();
 
             try
             {
