@@ -6,7 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net.Http;
 using System.Data;
+using EmployeeWPF.Utils;
+using Newtonsoft.Json.Linq;
 
 namespace EmployeeWPF.Model
 {
@@ -17,6 +20,11 @@ namespace EmployeeWPF.Model
     {
         private static ObservableCollection<Employee> employeeList;
         private static ObservableCollection<Department> departmentList;
+        private static HttpClient httpClient;
+
+        public static readonly string endPoint = ConfigurationManager.AppSettings["BaseAddress"]; //получение адреса сервиса из конфига
+
+        //CLEAR
         private static SqlConnection connection;
         private static bool needFillData = false;
         private static SqlCommand command;
@@ -52,19 +60,9 @@ namespace EmployeeWPF.Model
         {
             employeeList = new ObservableCollection<Employee>();
             departmentList = new ObservableCollection<Department>();
-
-            try
-            {
-                InitDBConnection();
-                connection.Open();
-                GenerateDBSchema();
-                FillTestData();
-                FillLists();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            FillLists();
         }
 
         /// <summary>
@@ -177,43 +175,32 @@ namespace EmployeeWPF.Model
         }
 
         /// <summary>
-        /// Наполение списков сотрудников и подразделений данными из БД
+        /// Наполение списков сотрудников и подразделений данными
         /// </summary>
         private static void FillLists()
         {
-            SqlDataReader reader;
-
-            //наполняем подразделения
-            command = new SqlCommand(selectDepartment, connection);
-            reader = command.ExecuteReader();
-            if (reader.HasRows)
+            //получаем подразделения
+            var departResult = httpClient.GetStringAsync($"{endPoint}{Endpoint.getDepartments}").Result;
+            JArray jArray = JArray.Parse(departResult);
+            foreach (var item in jArray)
             {
-                while(reader.Read())
-                {
-                    departmentList.Add(new Department(reader.GetInt32(reader.GetOrdinal("Id")),
-                                                      reader.GetString(reader.GetOrdinal("Name")) ));
-                }
+                departmentList.Add(new Department(Convert.ToInt32(item["id"]), item["name"].ToString()));
             }
-            reader.Close();
 
-            //наполняем сотрудников
-            command = new SqlCommand(selectEmployee, connection);
-            reader = command.ExecuteReader();
-            if (reader.HasRows)
+            //получаем сотрудников
+            var empResult = httpClient.GetStringAsync($"{endPoint}{Endpoint.getEmployees}").Result;
+            jArray = JArray.Parse(empResult);
+            foreach (var item in jArray)
             {
-                while (reader.Read())
-                {
-                    employeeList.Add(new Employee(reader.GetInt32(reader.GetOrdinal("Id")),
-                                                  reader.GetString(reader.GetOrdinal("FirstName")),
-                                                  reader.GetString(reader.GetOrdinal("LastName")),
-                                                  GetDepartmentById(reader.GetInt32(reader.GetOrdinal("DepartId"))) ));
-                }
+                employeeList.Add(new Employee(Convert.ToInt32(item["id"]), item["firstName"].ToString(),
+                                    item["lastName"].ToString(), GetDepartmentById(Convert.ToInt32(item["department"]["id"]))));
             }
-            reader.Close();
+
+            Console.WriteLine();
         }
 
         /// <summary>
-        /// Получение подразделения по идентификатору
+        /// Получение подразделения из списка по идентификатору
         /// </summary>
         /// <returns></returns>
         private static Department GetDepartmentById(int id)
