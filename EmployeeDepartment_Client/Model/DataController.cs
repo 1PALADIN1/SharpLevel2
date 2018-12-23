@@ -26,10 +26,7 @@ namespace EmployeeWPF.Model
 
         //CLEAR
         private static SqlConnection connection;
-        private static bool needFillData = false;
         private static SqlCommand command;
-        private static string selectEmployee = @"SELECT * FROM [dbo].[Employee]";
-        private static string selectDepartment = @"SELECT * FROM [dbo].[Department]";
 
         public static ObservableCollection<Employee> EmployeeList
         {
@@ -63,115 +60,6 @@ namespace EmployeeWPF.Model
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             FillLists();
-        }
-
-        /// <summary>
-        /// Инициализация подключения к БД
-        /// </summary>
-        private static void InitDBConnection()
-        {
-            if (connection == null)
-                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["MyDBConnection"].ConnectionString);
-        }
-
-        /// <summary>
-        /// Генерация схемы данных (таблицы сотрдуников и подразделений)
-        /// </summary>
-        private static void GenerateDBSchema()
-        {
-            string createEmpTable = @"
-                    CREATE TABLE [dbo].[Employee] (
-                        [Id]        INT    IDENTITY(1,1)      NOT NULL,
-                        [FirstName] VARCHAR (50) NOT NULL,
-                        [LastName]  VARCHAR (50) NOT NULL,
-                        [DepartId]  INT          NOT NULL,
-                        PRIMARY KEY CLUSTERED ([Id] ASC)
-                    );";
-            string createDepartTable = @"
-                    CREATE TABLE [dbo].[Department] (
-                        [Id]   INT     IDENTITY(1,1)     NOT NULL,
-                        [Name] VARCHAR (50) NOT NULL,
-                        PRIMARY KEY CLUSTERED ([Id] ASC)
-                    );";
-
-            try
-            {
-                //пробуем сделать выборку сотрудников
-                command = new SqlCommand(selectEmployee, connection);
-                command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                //если таблицы не существует, создаём её
-                command = new SqlCommand(createEmpTable, connection);
-                command.ExecuteNonQuery();
-                needFillData = true;
-            }
-            
-            try
-            {
-                //пробуем сделать выборку предприятий
-                command = new SqlCommand(selectDepartment, connection);
-                command.ExecuteNonQuery();
-            }
-            catch (Exception)
-            {
-                //если таблицы не существует, создаём её
-                command = new SqlCommand(createDepartTable, connection);
-                command.ExecuteNonQuery();
-                needFillData = true;
-            }
-        }
-
-        /// <summary>
-        /// Заполнение списков тестовыми данными (временная функция)
-        /// </summary>
-        private static void FillTestData()
-        {
-            //заполняем таблицы тестовыми данными
-            if (needFillData)
-            {
-                string deleteAllEmployee = @"DELETE FROM [dbo].[Employee];";
-                string deleteAllDepartment = @"DELETE FROM [dbo].[Department];";
-
-                //на всякий случай очищаем данные из таблиц (вдруг одна из них заполнена)
-                command = new SqlCommand(deleteAllEmployee, connection);
-                command.ExecuteNonQuery();
-                command = new SqlCommand(deleteAllDepartment, connection);
-                command.ExecuteNonQuery();
-
-                var insertDepart = new string[]
-                {
-                    @"INSERT INTO [dbo].[Department] (Name) VALUES ('Man & Woman');",
-                    @"INSERT INTO [dbo].[Department] (Name) VALUES ('Dance Dance');",
-                    @"INSERT INTO [dbo].[Department] (Name) VALUES ('Gris');",
-                    @"INSERT INTO [dbo].[Department] (Name) VALUES ('Nikke');",
-                    @"INSERT INTO [dbo].[Department] (Name) VALUES ('Abidas');",
-                    @"INSERT INTO [dbo].[Department] (Name) VALUES ('Apple Apple');"
-                };
-
-                foreach (var item in insertDepart)
-                {
-                    command = new SqlCommand(item, connection);
-                    command.ExecuteNonQuery();
-                }
-
-                var inserEmployee = new string[]
-                {
-                     @"INSERT INTO [dbo].[Employee] (FirstName, LastName, DepartId) VALUES ('Olga', 'Buzova', 1);",
-                     @"INSERT INTO [dbo].[Employee] (FirstName, LastName, DepartId) VALUES ('Igor', 'Zheplakov', 3);",
-                     @"INSERT INTO [dbo].[Employee] (FirstName, LastName, DepartId) VALUES ('Enrike', 'Iglesias', 4);",
-                     @"INSERT INTO [dbo].[Employee] (FirstName, LastName, DepartId) VALUES ('Victor', 'Michurin', 1);",
-                     @"INSERT INTO [dbo].[Employee] (FirstName, LastName, DepartId) VALUES ('Nani', 'Abdulaev', 2);",
-                     @"INSERT INTO [dbo].[Employee] (FirstName, LastName, DepartId) VALUES ('Nike', 'Nikov', 5);",
-                };
-
-                foreach (var item in inserEmployee)
-                {
-                    command = new SqlCommand(item, connection);
-                    command.ExecuteNonQuery();
-                }
-            }
         }
 
         /// <summary>
@@ -214,20 +102,8 @@ namespace EmployeeWPF.Model
         }
 
         /// <summary>
-        /// Закрытие соединения
-        /// </summary>
-        public static void CloseDBConnection()
-        {
-            if (connection != null)
-            {
-                connection.Close();
-            }
-        }
-
-        /// <summary>
         /// Обновление записи
         /// </summary>
-        /// <typeparam name="T">Тип объекта</typeparam>
         /// <param name="updateObject">Объект</param>
         public static void UpdateRecord(IDB updateObject)
         {
