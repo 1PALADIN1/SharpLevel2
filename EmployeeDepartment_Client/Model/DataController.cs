@@ -10,6 +10,8 @@ using System.Net.Http;
 using System.Data;
 using EmployeeWPF.Utils;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace EmployeeWPF.Model
 {
@@ -59,6 +61,14 @@ namespace EmployeeWPF.Model
             departmentList = new ObservableCollection<Department>();
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            //настроки конвертера
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
             FillLists();
         }
 
@@ -70,6 +80,7 @@ namespace EmployeeWPF.Model
             //получаем подразделения
             var departResult = httpClient.GetStringAsync($"{endPoint}{Endpoint.getDepartments}").Result;
             JArray jArray = JArray.Parse(departResult);
+
             foreach (var item in jArray)
             {
                 departmentList.Add(new Department(Convert.ToInt32(item["id"]), item["name"].ToString()));
@@ -83,8 +94,6 @@ namespace EmployeeWPF.Model
                 employeeList.Add(new Employee(Convert.ToInt32(item["id"]), item["firstName"].ToString(),
                                     item["lastName"].ToString(), GetDepartmentById(Convert.ToInt32(item["department"]["id"]))));
             }
-
-            Console.WriteLine();
         }
 
         /// <summary>
@@ -107,14 +116,14 @@ namespace EmployeeWPF.Model
         /// <param name="updateObject">Объект</param>
         public static void UpdateRecord(IDB updateObject)
         {
-            string tableName = String.Empty;
-            if (updateObject is Employee) tableName = "Employee";
-            if (updateObject is Department) tableName = "Department";
+            //string tableName = String.Empty;
+            //if (updateObject is Employee) tableName = "Employee";
+            //if (updateObject is Department) tableName = "Department";
 
-            if (String.IsNullOrEmpty(tableName)) return;
+            //if (String.IsNullOrEmpty(tableName)) return;
 
-            command = new SqlCommand(updateObject.UpdateString(tableName), connection);
-            command.ExecuteNonQuery();
+            //command = new SqlCommand(updateObject.UpdateString(tableName), connection);
+            //command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -122,15 +131,18 @@ namespace EmployeeWPF.Model
         /// </summary>
         public static void UpdateAllData()
         {
-            foreach (var item in employeeList)
-            {
-                UpdateRecord(item);
-            }
+            //подразделения
+            var stringContent = new StringContent(JsonConvert.SerializeObject(departmentList),
+                Encoding.UTF8, "application/json");
+            var postResult = httpClient.PostAsync($"{endPoint}{Endpoint.updateDepartments}", stringContent).Result;
 
-            foreach (var item in departmentList)
-            {
-                UpdateRecord(item);
-            }
+            //сотрудники
+            stringContent = new StringContent(JsonConvert.SerializeObject(employeeList),
+                Encoding.UTF8, "application/json");
+            postResult = httpClient.PostAsync($"{endPoint}{Endpoint.updateEmployees}", stringContent).Result;
+
+            Console.WriteLine(postResult);
+            Console.WriteLine();
         }
 
         /// <summary>

@@ -235,7 +235,6 @@ namespace EmployeeDepartment_WS.Models
         /// <summary>
         /// Обновление записи
         /// </summary>
-        /// <typeparam name="T">Тип объекта</typeparam>
         /// <param name="updateObject">Объект</param>
         public static void UpdateRecord(IDB updateObject)
         {
@@ -252,17 +251,25 @@ namespace EmployeeDepartment_WS.Models
         /// <summary>
         /// Обновление всех данных
         /// </summary>
-        public static void UpdateAllData()
+        public static bool UpdateAllData<T>(List<T> updateList) where T : IDB
         {
-            foreach (var item in employeeList)
+            try
             {
-                UpdateRecord(item);
-            }
+                foreach (var item in updateList)
+                {
+                    UpdateRecord(item);
+                }
 
-            foreach (var item in departmentList)
-            {
-                UpdateRecord(item);
+                //обновление списков
+                employeeList.Clear();
+                departmentList.Clear();
+                FillLists();
             }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>

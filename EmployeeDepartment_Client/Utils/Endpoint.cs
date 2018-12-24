@@ -10,5 +10,7 @@ namespace EmployeeWPF.Utils
     {
         public static readonly string getEmployees = "getemplist";
         public static readonly string getDepartments = "getdepartlist";
+        public static readonly string updateDepartments = "updatedepart";
+        public static readonly string updateEmployees = "updateemp";
     }
 }
