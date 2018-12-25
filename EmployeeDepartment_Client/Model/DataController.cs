@@ -140,9 +140,6 @@ namespace EmployeeWPF.Model
             stringContent = new StringContent(JsonConvert.SerializeObject(employeeList),
                 Encoding.UTF8, "application/json");
             postResult = httpClient.PostAsync($"{endPoint}{Endpoint.updateEmployees}", stringContent).Result;
-
-            Console.WriteLine(postResult);
-            Console.WriteLine();
         }
 
         /// <summary>

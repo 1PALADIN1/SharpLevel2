@@ -19,6 +19,11 @@ namespace EmployeeWPF.Model
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public int Id
+        {
+            get => id;
+        }
+
         public string FullName
         {
             get => $"{lastName} {firstName}";

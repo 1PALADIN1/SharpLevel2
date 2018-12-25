@@ -18,6 +18,11 @@ namespace EmployeeDepartment_WS.Models
         private string lastName;
         private Department department;
 
+        public int Id
+        {
+            get => id;
+        }
+
         public string FullName
         {
             get => $"{lastName} {firstName}";
@@ -94,7 +99,7 @@ namespace EmployeeDepartment_WS.Models
         /// <returns>Возвращает итоговую строку запроса</returns>
         public string UpdateString(string tableName)
         {
-            return $"UPDATE [dbo].[{tableName}] SET FirstName = '{FirstName}', LastName = '{LastName}', DepartId = {Department.Id} WHERE Id = {id};";
+            return $"UPDATE [dbo].[{tableName}] SET FirstName = '{firstName}', LastName = '{lastName}', DepartId = {Department.Id} WHERE Id = {id};";
         }
 
         /// <summary>
@@ -104,7 +109,7 @@ namespace EmployeeDepartment_WS.Models
         /// <returns>Возвращает итоговую строку запроса</returns>
         public string InsertString(string tableName)
         {
-            return $"INSERT INTO [dbo].[{tableName}] (FirstName, LastName, DepartId) VALUES ('{FirstName}', '{LastName}', {Department.Id});";
+            return $"INSERT INTO [dbo].[{tableName}] (FirstName, LastName, DepartId) VALUES ('{firstName}', '{lastName}', {Department.Id});";
         }
 
         /// <summary>
