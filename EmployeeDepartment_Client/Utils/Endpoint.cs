@@ -14,5 +14,7 @@ namespace EmployeeWPF.Utils
         public static readonly string updateEmployees = "updateemp";
         public static readonly string insertDepartment = "insertdepart";
         public static readonly string insertEmployee = "insertemployee";
+        public static readonly string deleteDepartment = "deletedepart";
+        public static readonly string deleteEmployee = "deleteemp";
     }
 }

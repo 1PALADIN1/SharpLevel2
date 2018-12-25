@@ -154,10 +154,7 @@ namespace EmployeeWPF.Model
                 postAddress = $"{endPoint}{Endpoint.insertEmployee}";
 
             if (String.IsNullOrEmpty(postAddress)) return;
-
-            var stringContent = new StringContent(JsonConvert.SerializeObject(insertObject),
-                Encoding.UTF8, "application/json");
-            var postResult = httpClient.PostAsync(postAddress, stringContent).Result;
+            Post(insertObject, postAddress);
 
             //временное решение, чтобы цеплялись id к новым записям
             departmentList.Clear();
@@ -165,24 +162,38 @@ namespace EmployeeWPF.Model
             FillLists();
         }
 
+        /// <summary>
+        /// Удаление записи
+        /// </summary>
+        /// <param name="deleteObject">Удаляемый объект</param>
         public static void DeleteRecord(IDB deleteObject)
         {
-            string tableName = String.Empty;
+            string postAddress = String.Empty;
             if (deleteObject is Employee employee)
             {
                 employeeList.Remove(employee);
-                tableName = "Employee";
+                postAddress = $"{endPoint}{Endpoint.deleteEmployee}";
             }
             if (deleteObject is Department department)
             {
                 departmentList.Remove(department);
-                tableName = "Department";
+                postAddress = $"{endPoint}{Endpoint.deleteDepartment}";
             }
 
-            if (String.IsNullOrEmpty(tableName)) return;
+            if (String.IsNullOrEmpty(postAddress)) return;
+            Post(deleteObject, postAddress);
+        }
 
-            command = new SqlCommand(deleteObject.DeleteString(tableName), connection);
-            command.ExecuteNonQuery();
+        /// <summary>
+        /// Выполение post-запроса
+        /// </summary>
+        /// <param name="postObject">Объект для отправки</param>
+        /// <param name="postAddress">Адрес точки отправки</param>
+        private static void Post(IDB postObject, string postAddress)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(postObject),
+               Encoding.UTF8, "application/json");
+            var postResult = httpClient.PostAsync(postAddress, stringContent).Result;
         }
     }
 }

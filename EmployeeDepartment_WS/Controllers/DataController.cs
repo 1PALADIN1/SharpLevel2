@@ -29,7 +29,7 @@ namespace EmployeeDepartment_WS.Controllers
         /// Обновление всех подразделений
         /// </summary>
         /// <param name="departments">Список подразделений</param>
-        /// <returns>Возвращает статус OK при успешном добавлении</returns>
+        /// <returns>Возвращает статус OK при успешном обновлении</returns>
         [Route("updatedepart")]
         public HttpResponseMessage Post([FromBody] List<Department> departments)
         {
@@ -73,6 +73,32 @@ namespace EmployeeDepartment_WS.Controllers
         public HttpResponseMessage Post([FromBody] Employee insertEmployee)
         {
             if (DataModel.InsertRecord(insertEmployee))
+                return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Удаление подразделения
+        /// </summary>
+        /// <param name="department">Подразделение</param>
+        /// <returns>Возвращает статус OK при успешном удалении</returns>
+        [Route("deletedepart")]
+        public HttpResponseMessage PostDelete([FromBody] Department department)
+        {
+            if (DataModel.DeleteRecord(department))
+                return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Удаление сотрудника
+        /// </summary>
+        /// <param name="employee">Сотрудник</param>
+        /// <returns>Возвращает статус OK при успешном удалении</returns>
+        [Route("deleteemp")]
+        public HttpResponseMessage PostDelete([FromBody] Employee employee)
+        {
+            if (DataModel.DeleteRecord(employee))
                 return Request.CreateResponse(HttpStatusCode.OK);
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }

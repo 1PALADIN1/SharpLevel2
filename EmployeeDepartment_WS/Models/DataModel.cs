@@ -305,25 +305,33 @@ namespace EmployeeDepartment_WS.Models
         /// <summary>
         /// Удаление записи
         /// </summary>
-        /// <param name="deleteObject"></param>
-        public static void DeleteRecord(IDB deleteObject)
+        /// <param name="deleteObject">Удаляемый объект</param>
+        public static bool DeleteRecord(IDB deleteObject)
         {
-            string tableName = String.Empty;
-            if (deleteObject is Employee employee)
+            try
             {
-                employeeList.Remove(employee);
-                tableName = "Employee";
+                string tableName = String.Empty;
+                if (deleteObject is Employee employee)
+                {
+                    tableName = "Employee";
+                }
+                if (deleteObject is Department department)
+                {
+                    tableName = "Department";
+                }
+
+                if (String.IsNullOrEmpty(tableName)) return true;
+
+                command = new SqlCommand(deleteObject.DeleteString(tableName), connection);
+                command.ExecuteNonQuery();
             }
-            if (deleteObject is Department department)
+            catch (Exception)
             {
-                departmentList.Remove(department);
-                tableName = "Department";
+                return false;
             }
 
-            if (String.IsNullOrEmpty(tableName)) return;
-
-            command = new SqlCommand(deleteObject.DeleteString(tableName), connection);
-            command.ExecuteNonQuery();
+            RefreshLists();
+            return true;
         }
 
         /// <summary>
