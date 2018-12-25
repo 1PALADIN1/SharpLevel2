@@ -261,9 +261,7 @@ namespace EmployeeDepartment_WS.Models
                 }
 
                 //обновление списков
-                employeeList.Clear();
-                departmentList.Clear();
-                FillLists();
+                RefreshLists();
             }
             catch (Exception)
             {
@@ -275,31 +273,39 @@ namespace EmployeeDepartment_WS.Models
         /// <summary>
         /// Вставка записи
         /// </summary>
-        public static void InsertRecord(IDB insertObject)
+        public static bool InsertRecord(IDB insertObject)
         {
-            string tableName = String.Empty;
-            if (insertObject is Employee employee)
+            try
             {
-                employeeList.Add(employee);
-                tableName = "Employee";
+                string tableName = String.Empty;
+                if (insertObject is Employee employee)
+                {
+                    tableName = "Employee";
+                }
+                if (insertObject is Department department)
+                {
+                    tableName = "Department";
+                }
+
+                if (String.IsNullOrEmpty(tableName)) return true;
+
+                command = new SqlCommand(insertObject.InsertString(tableName), connection);
+                command.ExecuteNonQuery();
             }
-            if (insertObject is Department department)
+            catch (Exception)
             {
-                departmentList.Add(department);
-                tableName = "Department";
+                return false;
             }
-
-            if (String.IsNullOrEmpty(tableName)) return;
-
-            command = new SqlCommand(insertObject.InsertString(tableName), connection);
-            command.ExecuteNonQuery();
 
             //временное решение, чтобы цеплялись id к новым записям
-            departmentList.Clear();
-            employeeList.Clear();
-            FillLists();
+            RefreshLists();
+            return true;
         }
 
+        /// <summary>
+        /// Удаление записи
+        /// </summary>
+        /// <param name="deleteObject"></param>
         public static void DeleteRecord(IDB deleteObject)
         {
             string tableName = String.Empty;
@@ -318,6 +324,16 @@ namespace EmployeeDepartment_WS.Models
 
             command = new SqlCommand(deleteObject.DeleteString(tableName), connection);
             command.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Обновление списков
+        /// </summary>
+        private static void RefreshLists()
+        {
+            employeeList.Clear();
+            departmentList.Clear();
+            FillLists();
         }
     }
 }

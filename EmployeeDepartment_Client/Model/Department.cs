@@ -59,7 +59,7 @@ namespace EmployeeWPF.Model
         /// <returns>Название подразделения</returns>
         public override string ToString()
         {
-            return Name;
+            return $"{Id}. {Name}";
         }
 
         /// <summary>

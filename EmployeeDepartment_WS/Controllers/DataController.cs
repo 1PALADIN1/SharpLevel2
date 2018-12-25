@@ -41,12 +41,38 @@ namespace EmployeeDepartment_WS.Controllers
         /// <summary>
         /// Обновление всех сотрудников
         /// </summary>
-        /// <param name="departments">Список сотрудников</param>
-        /// <returns>Возвращает статус OK при успешном добавлении</returns>
+        /// <param name="employees">Список сотрудников</param>
+        /// <returns>Возвращает статус OK при успешном обновлении</returns>
         [Route("updateemp")]
         public HttpResponseMessage Post([FromBody] List<Employee> employees)
         {
             if (DataModel.UpdateAllData(employees))
+                return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Вставка нового подразделения
+        /// </summary>
+        /// <param name="insertDepart">Подразделение</param>
+        /// <returns>Возвращает статус OK при успешном добавлении</returns>
+        [Route("insertdepart")]
+        public HttpResponseMessage Post([FromBody] Department insertDepart)
+        {
+            if (DataModel.InsertRecord(insertDepart))
+                return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Вставка нового сотрудника
+        /// </summary>
+        /// <param name="insertEmployee">Сотрудник</param>
+        /// <returns>Возвращает статус OK при успешном добавлении</returns>
+        [Route("insertemployee")]
+        public HttpResponseMessage Post([FromBody] Employee insertEmployee)
+        {
+            if (DataModel.InsertRecord(insertEmployee))
                 return Request.CreateResponse(HttpStatusCode.OK);
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }

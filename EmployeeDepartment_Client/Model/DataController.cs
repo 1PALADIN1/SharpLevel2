@@ -147,22 +147,17 @@ namespace EmployeeWPF.Model
         /// </summary>
         public static void InsertRecord(IDB insertObject)
         {
-            string tableName = String.Empty;
-            if (insertObject is Employee employee)
-            {
-                employeeList.Add(employee);
-                tableName = "Employee";
-            }
-            if (insertObject is Department department)
-            {
-                departmentList.Add(department);
-                tableName = "Department";
-            }
+            string postAddress = String.Empty;
+            if (insertObject is Department)
+                postAddress = $"{endPoint}{Endpoint.insertDepartment}";
+            if (insertObject is Employee)
+                postAddress = $"{endPoint}{Endpoint.insertEmployee}";
 
-            if (String.IsNullOrEmpty(tableName)) return;
+            if (String.IsNullOrEmpty(postAddress)) return;
 
-            command = new SqlCommand(insertObject.InsertString(tableName), connection);
-            command.ExecuteNonQuery();
+            var stringContent = new StringContent(JsonConvert.SerializeObject(insertObject),
+                Encoding.UTF8, "application/json");
+            var postResult = httpClient.PostAsync(postAddress, stringContent).Result;
 
             //временное решение, чтобы цеплялись id к новым записям
             departmentList.Clear();
