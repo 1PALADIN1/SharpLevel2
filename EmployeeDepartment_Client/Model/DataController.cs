@@ -26,10 +26,6 @@ namespace EmployeeWPF.Model
 
         public static readonly string endPoint = ConfigurationManager.AppSettings["BaseAddress"]; //получение адреса сервиса из конфига
 
-        //CLEAR
-        private static SqlConnection connection;
-        private static SqlCommand command;
-
         public static ObservableCollection<Employee> EmployeeList
         {
             get
@@ -130,14 +126,10 @@ namespace EmployeeWPF.Model
         public static void UpdateAllData()
         {
             //подразделения
-            var stringContent = new StringContent(JsonConvert.SerializeObject(departmentList),
-                Encoding.UTF8, "application/json");
-            var postResult = httpClient.PostAsync($"{endPoint}{Endpoint.updateDepartments}", stringContent).Result;
+            Post(departmentList, $"{endPoint}{Endpoint.updateDepartments}");
 
             //сотрудники
-            stringContent = new StringContent(JsonConvert.SerializeObject(employeeList),
-                Encoding.UTF8, "application/json");
-            postResult = httpClient.PostAsync($"{endPoint}{Endpoint.updateEmployees}", stringContent).Result;
+            Post(employeeList, $"{endPoint}{Endpoint.updateEmployees}");
         }
 
         /// <summary>
@@ -187,7 +179,7 @@ namespace EmployeeWPF.Model
         /// </summary>
         /// <param name="postObject">Объект для отправки</param>
         /// <param name="postAddress">Адрес точки отправки</param>
-        private static void Post(IDB postObject, string postAddress)
+        private static void Post<T>(T postObject, string postAddress)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(postObject),
                Encoding.UTF8, "application/json");
