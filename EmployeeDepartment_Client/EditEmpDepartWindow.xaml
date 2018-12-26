@@ -11,9 +11,16 @@
             <RowDefinition Height="240*"/>
             <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="departmentListBox" Grid.Row="0" Grid.Column="0" 
+        <ListBox x:Name="departmentListBox"
+                 Grid.Row="0" Grid.Column="0" 
                  HorizontalAlignment="Stretch" 
-                 VerticalAlignment="Stretch"/>
+                 VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Button x:Name="btEmpChooseDepart" Content="Выбрать"
                 HorizontalAlignment="Center" Grid.Row="1"
                 VerticalAlignment="Center" Width="75"

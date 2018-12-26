@@ -32,7 +32,13 @@
                  Grid.Column="1"
                  Grid.Row="1" 
                  HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"/>
+                 VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Button x:Name="btAddNewEmployee" Content="Добавить"
                 HorizontalAlignment="Center"
                 Grid.Row="2"
