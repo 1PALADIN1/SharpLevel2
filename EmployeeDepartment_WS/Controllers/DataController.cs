@@ -30,7 +30,7 @@ namespace EmployeeDepartment_WS.Controllers
         /// </summary>
         /// <param name="departments">Список подразделений</param>
         /// <returns>Возвращает статус OK при успешном обновлении</returns>
-        [Route("updatedepart")]
+        [Route("updatedepartlist")]
         public HttpResponseMessage Post([FromBody] List<Department> departments)
         {
             if (DataModel.UpdateAllData(departments))
@@ -43,7 +43,7 @@ namespace EmployeeDepartment_WS.Controllers
         /// </summary>
         /// <param name="employees">Список сотрудников</param>
         /// <returns>Возвращает статус OK при успешном обновлении</returns>
-        [Route("updateemp")]
+        [Route("updateemplist")]
         public HttpResponseMessage Post([FromBody] List<Employee> employees)
         {
             if (DataModel.UpdateAllData(employees))
@@ -100,6 +100,22 @@ namespace EmployeeDepartment_WS.Controllers
         {
             if (DataModel.DeleteRecord(employee))
                 return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.BadRequest);
+        }
+
+        /// <summary>
+        /// Обновление единичной записи сотрудника
+        /// </summary>
+        /// <param name="employee">Сотрудник</param>
+        /// <returns>Возвращает статус OK при успешном обновлении</returns>
+        [Route("updateemp")]
+        public HttpResponseMessage PostUpdate([FromBody] Employee employee)
+        {
+            if (DataModel.UpdateRecord(employee))
+            {
+                DataModel.RefreshLists();
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
             return Request.CreateResponse(HttpStatusCode.BadRequest);
         }
     }

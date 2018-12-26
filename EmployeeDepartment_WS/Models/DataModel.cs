@@ -236,16 +236,24 @@ namespace EmployeeDepartment_WS.Models
         /// Обновление записи
         /// </summary>
         /// <param name="updateObject">Объект</param>
-        public static void UpdateRecord(IDB updateObject)
+        public static bool UpdateRecord(IDB updateObject)
         {
             string tableName = String.Empty;
             if (updateObject is Employee) tableName = "Employee";
             if (updateObject is Department) tableName = "Department";
 
-            if (String.IsNullOrEmpty(tableName)) return;
+            if (String.IsNullOrEmpty(tableName)) return true;
 
-            command = new SqlCommand(updateObject.UpdateString(tableName), connection);
-            command.ExecuteNonQuery();
+            try
+            {
+                command = new SqlCommand(updateObject.UpdateString(tableName), connection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -337,7 +345,7 @@ namespace EmployeeDepartment_WS.Models
         /// <summary>
         /// Обновление списков
         /// </summary>
-        private static void RefreshLists()
+        public static void RefreshLists()
         {
             employeeList.Clear();
             departmentList.Clear();

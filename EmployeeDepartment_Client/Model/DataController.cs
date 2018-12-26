@@ -116,14 +116,12 @@ namespace EmployeeWPF.Model
         /// <param name="updateObject">Объект</param>
         public static void UpdateRecord(IDB updateObject)
         {
-            //string tableName = String.Empty;
-            //if (updateObject is Employee) tableName = "Employee";
-            //if (updateObject is Department) tableName = "Department";
+            string postAddress = String.Empty;
+            if (updateObject is Employee)
+                postAddress = $"{endPoint}{Endpoint.updateEmployee}";
 
-            //if (String.IsNullOrEmpty(tableName)) return;
-
-            //command = new SqlCommand(updateObject.UpdateString(tableName), connection);
-            //command.ExecuteNonQuery();
+            if (String.IsNullOrEmpty(postAddress)) return;
+            Post(updateObject, postAddress);
         }
 
         /// <summary>
