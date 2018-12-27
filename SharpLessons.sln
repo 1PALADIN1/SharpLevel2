@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLesson4", "SharpLesson
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeWPF", "EmployeeWPF\EmployeeWPF.csproj", "{4656AF50-D49D-4010-A7E9-DEDE351DFD40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeDepartment_WS", "EmployeeDepartment_WS\EmployeeDepartment_WS.csproj", "{76091559-B580-4E62-A42E-91E50CF2E95D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeDepartment_Client", "EmployeeDepartment_Client\EmployeeDepartment_Client.csproj", "{29976E26-B3C7-477C-8C94-297186D245E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{4656AF50-D49D-4010-A7E9-DEDE351DFD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4656AF50-D49D-4010-A7E9-DEDE351DFD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4656AF50-D49D-4010-A7E9-DEDE351DFD40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76091559-B580-4E62-A42E-91E50CF2E95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76091559-B580-4E62-A42E-91E50CF2E95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76091559-B580-4E62-A42E-91E50CF2E95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76091559-B580-4E62-A42E-91E50CF2E95D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29976E26-B3C7-477C-8C94-297186D245E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29976E26-B3C7-477C-8C94-297186D245E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29976E26-B3C7-477C-8C94-297186D245E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29976E26-B3C7-477C-8C94-297186D245E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
